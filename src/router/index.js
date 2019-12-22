@@ -56,6 +56,34 @@ export const constantRoutes = [
   },
 
   {
+    path: '/account',
+    component: Layout,
+    redirect: '/account/list',
+    name: 'Account',
+    meta: { title: '账户中心', icon: 'people' },
+    children: [
+      {
+        path: 'add',
+        name: 'add',
+        component: () => import('@/views/account/add'),
+        meta: { title: '添加用户' }
+      },
+      {
+        path: 'list',
+        name: 'list',
+        component: () => import('@/views/account/list'),
+        meta: { title: '用户列表' }
+      },
+      {
+        path: 'info',
+        name: 'Info',
+        component: () => import('@/views/account/info'),
+        meta: { title: '账户信息' }
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
