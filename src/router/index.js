@@ -106,7 +106,7 @@ export const constantRoutes = [
       {
         path: 'tree',
         name: 'Tree',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/advert/list'),
         meta: { title: '结构树' }
       }
     ]
