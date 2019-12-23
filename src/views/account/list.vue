@@ -2,24 +2,24 @@
   <div class="app-container">
     <el-button type="primary">合作商户列表</el-button>
 
-    <el-table :data="merchantList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="商户ID" width="80">
+    <el-table :data="accountList" style="width: 100%;margin-top:30px;" border>
+      <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
-      <el-table-column align="header-center" label="商户名称">
-        <template slot-scope="scope">{{ scope.row.company }}</template>
+      <el-table-column align="header-center" label="账户名称">
+        <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column align="header-center" label="商户账号">
-        <template slot-scope="scope">{{ scope.row.username }}</template>
+      <el-table-column align="header-center" label="账户类型">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.type == 1" type="success" size="mini">管理员</el-button>
+          <el-button v-else type="danger" size="mini">合作商户</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column align="header-center" label="登录账号">
+        <template slot-scope="scope">{{ scope.row.account }}</template>
       </el-table-column>
       <el-table-column align="header-center" label="手机号">
         <template slot-scope="scope">{{ scope.row.mobile }}</template>
-      </el-table-column>
-      <el-table-column align="header-center" label="余额">
-        <template slot-scope="scope">{{ scope.row.amount / 100 }} 元</template>
-      </el-table-column>
-      <el-table-column align="header-center" label="提现手续" width="80">
-        <template slot-scope="scope">{{ scope.row.fee }} %</template>
       </el-table-column>
       <el-table-column align="header-center" label="状态" width="90">
         <template slot-scope="scope">
@@ -61,21 +61,16 @@
       @pagination="getList"
     />
 
-    <el-dialog :visible.sync="dialogVisible" title="编辑合作商户">
-      <el-form :model="merchant" label-width="120px" label-position="left">
+    <el-dialog :visible.sync="dialogVisible" title="编辑用户信息">
+      <el-form :model="account" label-width="120px" label-position="left">
         <el-form-item label="商户名称">
-          <el-input v-model="merchant.name" placeholder="商户名称" />
+          <el-input v-model="account.name" placeholder="账户名称" />
         </el-form-item>
         <el-form-item label="手机号">
-          <el-input v-model="merchant.mobile" placeholder="手机号" />
+          <el-input v-model="account.mobile" placeholder="手机号" />
         </el-form-item>
-        <el-form-item label="修改手续费费率">
-          <el-input v-model="merchant.fee" placeholder="费率">
-            <template slot="append">%</template>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="重置商户密码">
-          <el-input v-model="merchant.password" placeholder="密码" />
+        <el-form-item label="重置密码">
+          <el-input v-model="account.password" placeholder="密码" />
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
@@ -99,14 +94,14 @@ export default {
         page: 1,
         limit: 10
       },
-      merchant: {
+      account: {
         id: '',
         name: '',
         mobile: '',
         fee: '',
         password: ''
       },
-      merchantList: [],
+      accountList: [],
       dialogVisible: false,
       defaultProps: {
         children: 'children',
@@ -120,18 +115,18 @@ export default {
   methods: {
     async getList() {
       const res = await getList(this.listQuery)
-      this.merchantList = res.data.data
+      this.accountList = res.data.data
       this.total = res.data.total
     },
     handleEdit(data) {
-      this.merchant.id = data.id
-      this.merchant.name = data.company
-      this.merchant.mobile = data.mobile
-      this.merchant.fee = data.fee
+      this.account.id = data.id
+      this.account.name = data.company
+      this.account.mobile = data.mobile
+      this.account.fee = data.fee
       this.dialogVisible = true
     },
     async handleOk() {
-      const res = await edit(this.merchant)
+      const res = await edit(this.account)
       if (res.code === 20000) {
         this.$message({
           type: 'success',

@@ -1,19 +1,45 @@
 <template>
   <div class="app-container">
     <div class="app-wrapper">
-      <el-form ref="form" :model="form" label-width="90px" style="display: inline-block">
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="90px"
+        style="display: inline-block"
+      >
+        <el-form-item label="账户类型">
+          <el-select
+            v-model="form.type"
+            placeholder="请选择账户类型"
+          >
+            <el-option
+              label="商户"
+              :value="0"
+            />
+            <el-option
+              label="管理员"
+              :value="1"
+            />
+          </el-select>
+        </el-form-item>
         <el-col :lg="24">
           <el-col :lg="12">
-            <el-form-item label="商户名称">
-              <el-input v-model="form.company" placeholder="请输入商户的名称" />
+            <el-form-item :label="form.type===0?'商户名称':'管理员名称'">
+              <el-input
+                v-model="form.name"
+                :placeholder="form.type===0?'请输入商户的名称':'请输入管理员名称'"
+              />
             </el-form-item>
           </el-col>
         </el-col>
 
         <el-col :lg="24">
           <el-col :lg="12">
-            <el-form-item label="商户账号">
-              <el-input v-model="form.username" placeholder="请输入商户的账号，用来登录系统" />
+            <el-form-item :label="form.type===0?'商户账号':'管理员账号'">
+              <el-input
+                v-model="form.account"
+                placeholder="请输入商户的账号，用来登录系统"
+              />
             </el-form-item>
           </el-col>
         </el-col>
@@ -21,17 +47,10 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="手机号码">
-              <el-input v-model="form.mobile" placeholder="手机号码，可以为空，由商户自行补充" />
-            </el-form-item>
-          </el-col>
-        </el-col>
-
-        <el-col :lg="24">
-          <el-col :lg="12">
-            <el-form-item label="提现手续费">
-              <el-input v-model="form.fee" placeholder="提现手续费，如果不设置的话则为0">
-                <template slot="append">%</template>
-              </el-input>
+              <el-input
+                v-model="form.mobile"
+                placeholder="手机号码，可以为空，由商户自行补充"
+              />
             </el-form-item>
           </el-col>
         </el-col>
@@ -39,7 +58,21 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="登录密码">
-              <el-input v-model="form.password" placeholder="请输入商户的登录密码" />
+              <el-input
+                v-model="form.password"
+                placeholder="请输入商户的登录密码"
+              />
+            </el-form-item>
+          </el-col>
+        </el-col>
+
+        <el-col :lg="24">
+          <el-col :lg="12">
+            <el-form-item label="确认密码">
+              <el-input
+                v-model="form.repassword"
+                placeholder="请输入商户的登录密码"
+              />
             </el-form-item>
           </el-col>
         </el-col>
@@ -47,7 +80,10 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">立即创建</el-button>
+              <el-button
+                type="primary"
+                @click="onSubmit"
+              >立即创建</el-button>
             </el-form-item>
           </el-col>
         </el-col>
@@ -63,25 +99,26 @@ export default {
   data() {
     return {
       form: {
-        company: '',
-        username: '',
+        type: 0,
+        name: '',
+        account: '',
         mobile: '',
-        fee: '',
-        password: ''
+        password: '',
+        repassword: ''
       }
     }
   },
   methods: {
     onSubmit() {
       add(this.form).then(res => {
-        if (res.code === 20000) {
+        if (res.code === 200) {
           this.$notify({
             title: '成功',
             message: res.message,
             type: 'success'
           })
           this.$router.push({
-            path: '/merchant/list'
+            path: '/account/list'
           })
         } else {
           this.$notify.error({
