@@ -30,34 +30,33 @@ import Layout from '@/layout'
  * 没有权限要求的基本页面
  * 所有角色可以访问
  */
-export const constantRoutes = [
-  {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
+export const constantRoutes = [{
+  path: '/login',
+  component: () => import('@/views/login/index'),
+  hidden: true
+},
 
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: {
-        title: '系统首页',
-        icon: 'dashboard',
-        roles: ['admin']
-      }
-    }]
-  },
+{
+  path: '/',
+  component: Layout,
+  redirect: '/dashboard',
+  children: [{
+    path: 'dashboard',
+    name: 'Dashboard',
+    component: () => import('@/views/dashboard/index'),
+    meta: {
+      title: '系统首页',
+      icon: 'dashboard',
+      roles: ['admin']
+    }
+  }]
+},
 
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  }
+{
+  path: '/404',
+  component: () => import('@/views/404'),
+  hidden: true
+}
 
 ]
 
@@ -65,92 +64,115 @@ export const constantRoutes = [
  * asyncRoutes
  * 需要根据用户角色动态加载的路由
  */
-export const asyncRoutes = [
-  {
-    path: '/account',
-    component: Layout,
-    redirect: '/account/list',
-    name: 'Account',
-    meta: { title: '账户中心', icon: 'people', roles: ['admin'] },
-    children: [
-      {
-        path: 'add',
-        name: 'add',
-        component: () => import('@/views/account/add'),
-        meta: {
-          title: '添加用户',
-          roles: ['admin']
-        }
-      },
-      {
-        path: 'list',
-        name: 'list',
-        component: () => import('@/views/account/list'),
-        meta: {
-          title: '用户列表',
-          roles: ['admin']
-        }
-      },
-      {
-        path: 'info',
-        name: 'Info',
-        component: () => import('@/views/account/info'),
-        meta: {
-          title: '账户信息',
-          roles: ['account']
-        }
-      }
-    ]
+export const asyncRoutes = [{
+  path: '/account',
+  component: Layout,
+  redirect: '/account/list',
+  name: 'Account',
+  alwaysShow: true,
+  meta: {
+    title: '账户中心',
+    icon: 'people',
+    roles: ['admin', 'account']
   },
-
-  {
-    path: '/advert',
-    component: Layout,
-    redirect: '/advert/list',
-    name: 'Advert',
-    meta: { title: '推广广告', icon: 'example', roles: ['admin'] },
-    children: [
-      {
-        path: 'add',
-        name: 'Add',
-        component: () => import('@/views/advert/add'),
-        meta: { title: '添加广告', roles: ['admin'] },
-        hidden: true
-      },
-      {
-        path: 'list',
-        name: 'List',
-        component: () => import('@/views/advert/list'),
-        meta: { title: '广告列表', roles: ['admin'] }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/advert/list'),
-        meta: { title: '结构树', roles: ['admin'] }
-      }
-    ]
+  children: [{
+    path: 'add',
+    name: 'add',
+    component: () => import('@/views/account/add'),
+    meta: {
+      title: '添加用户',
+      roles: ['admin']
+    }
   },
-
   {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: '外部链接', icon: 'link' }
-      }
-    ]
+    path: 'list',
+    name: 'list',
+    component: () => import('@/views/account/list'),
+    meta: {
+      title: '用户列表',
+      roles: ['admin']
+    }
   },
+  {
+    path: 'info',
+    name: 'Info',
+    component: () => import('@/views/account/info'),
+    meta: {
+      title: '账户信息',
+      roles: ['account']
+    }
+  }
+  ]
+},
 
-  // 404页必须放在最后！
-  { path: '*', redirect: '/404', hidden: true }
+{
+  path: '/advert',
+  component: Layout,
+  redirect: '/advert/list',
+  name: 'Advert',
+  meta: {
+    title: '推广广告',
+    icon: 'example',
+    roles: ['admin']
+  },
+  children: [{
+    path: 'add',
+    name: 'Add',
+    component: () => import('@/views/advert/add'),
+    meta: {
+      title: '添加广告',
+      roles: ['admin']
+    },
+    hidden: true
+  },
+  {
+    path: 'list',
+    name: 'List',
+    component: () => import('@/views/advert/list'),
+    meta: {
+      title: '广告列表',
+      roles: ['admin']
+    }
+  },
+  {
+    path: 'tree',
+    name: 'Tree',
+    component: () => import('@/views/advert/list'),
+    meta: {
+      title: '结构树',
+      roles: ['admin']
+    }
+  }
+  ]
+},
+
+{
+  path: 'external-link',
+  component: Layout,
+  children: [{
+    path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+    meta: {
+      title: '外部链接',
+      icon: 'link',
+      roles: ['admin']
+    }
+  }]
+},
+
+// 404页必须放在最后！
+{
+  path: '*',
+  redirect: '/404',
+  hidden: true
+}
 
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({
+    y: 0
+  }),
   routes: constantRoutes
 })
 
