@@ -17,7 +17,7 @@ import Layout from '@/layout'
  * redirect: noRedirect           如果设置noRedirect，则不会在面包屑中重定向
  * name:'router-name'             该名称由<keep-alive>使用（必须设置！！！）
  * meta : {
-    roles: ['admin','editor']    控制页面角色（您可以设置多个角色）
+    roles: ['isadmin','editor']    控制页面角色（您可以设置多个角色）
     title: 'title'               名称显示在侧边栏和面包屑中（推荐设置）
     icon: 'svg-name'             侧栏中的图标显示
     breadcrumb: false            如果设置为false，则该项将隐藏在面包屑中（默认为true）
@@ -37,22 +37,6 @@ export const constantRoutes = [{
 },
 
 {
-  path: '/',
-  component: Layout,
-  redirect: '/dashboard',
-  children: [{
-    path: 'dashboard',
-    name: 'Dashboard',
-    component: () => import('@/views/dashboard/index'),
-    meta: {
-      title: '系统首页',
-      icon: 'dashboard',
-      roles: ['admin']
-    }
-  }]
-},
-
-{
   path: '/404',
   component: () => import('@/views/404'),
   hidden: true
@@ -65,15 +49,31 @@ export const constantRoutes = [{
  * 需要根据用户角色动态加载的路由
  */
 export const asyncRoutes = [{
+  path: '/',
+  component: Layout,
+  redirect: '/dashboard',
+  children: [{
+    path: 'dashboard',
+    name: 'Dashboard',
+    component: () => import('@/views/dashboard/index'),
+    meta: {
+      title: '系统首页',
+      icon: 'dashboard',
+      roles: ['isadmin', 'isaccount']
+    }
+  }]
+},
+
+{
   path: '/account',
   component: Layout,
   redirect: '/account/list',
-  name: 'Account',
+  name: 'isaccount',
   alwaysShow: true,
   meta: {
     title: '账户中心',
     icon: 'people',
-    roles: ['admin', 'account']
+    roles: ['isadmin', 'isaccount']
   },
   children: [{
     path: 'add',
@@ -81,7 +81,7 @@ export const asyncRoutes = [{
     component: () => import('@/views/account/add'),
     meta: {
       title: '添加用户',
-      roles: ['admin']
+      roles: ['isadmin']
     }
   },
   {
@@ -90,7 +90,7 @@ export const asyncRoutes = [{
     component: () => import('@/views/account/list'),
     meta: {
       title: '用户列表',
-      roles: ['admin']
+      roles: ['isadmin']
     }
   },
   {
@@ -99,7 +99,7 @@ export const asyncRoutes = [{
     component: () => import('@/views/account/info'),
     meta: {
       title: '账户信息',
-      roles: ['account']
+      roles: ['isaccount']
     }
   }
   ]
@@ -110,10 +110,11 @@ export const asyncRoutes = [{
   component: Layout,
   redirect: '/advert/list',
   name: 'Advert',
+  alwaysShow: true,
   meta: {
     title: '推广广告',
     icon: 'example',
-    roles: ['admin']
+    roles: ['isadmin', 'isaccount']
   },
   children: [{
     path: 'add',
@@ -121,9 +122,8 @@ export const asyncRoutes = [{
     component: () => import('@/views/advert/add'),
     meta: {
       title: '添加广告',
-      roles: ['admin']
-    },
-    hidden: true
+      roles: ['isaccount']
+    }
   },
   {
     path: 'list',
@@ -131,7 +131,7 @@ export const asyncRoutes = [{
     component: () => import('@/views/advert/list'),
     meta: {
       title: '广告列表',
-      roles: ['admin']
+      roles: ['isaccount']
     }
   },
   {
@@ -140,7 +140,7 @@ export const asyncRoutes = [{
     component: () => import('@/views/advert/list'),
     meta: {
       title: '结构树',
-      roles: ['admin']
+      roles: ['isadmin']
     }
   }
   ]
@@ -149,12 +149,15 @@ export const asyncRoutes = [{
 {
   path: 'external-link',
   component: Layout,
+  meta: {
+    roles: ['isadmin', 'isaccount']
+  },
   children: [{
     path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
     meta: {
       title: '外部链接',
       icon: 'link',
-      roles: ['admin']
+      roles: ['isadmin', 'isaccount']
     }
   }]
 },
