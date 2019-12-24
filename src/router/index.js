@@ -7,39 +7,33 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /**
- * Note: sub-menu only appear when route children.length >= 1
+ * 注意：子菜单仅在路由children.length> = 1时出现
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * hidden: true                   如果设置为true，则项目不会显示在边栏中（默认为false）
+ * alwaysShow: true               如果设置为true，将始终显示根菜单
+ *                                如果未设置alwaysShow，则当项具有多个子路线时，
+ *                                它将变为嵌套模式，否则不显示根菜单
+ * redirect: noRedirect           如果设置noRedirect，则不会在面包屑中重定向
+ * name:'router-name'             该名称由<keep-alive>使用（必须设置！！！）
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    roles: ['admin','editor']    控制页面角色（您可以设置多个角色）
+    title: 'title'               名称显示在侧边栏和面包屑中（推荐设置）
+    icon: 'svg-name'             侧栏中的图标显示
+    breadcrumb: false            如果设置为false，则该项将隐藏在面包屑中（默认为true）
+    activeMenu: '/example/list'  如果设置了路径，则侧边栏将突出显示您设置的路径
   }
  */
 
 /**
  * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
+ * 没有权限要求的基本页面
+ * 所有角色可以访问
  */
 export const constantRoutes = [
   {
     path: '/login',
     component: () => import('@/views/login/index'),
-    hidden: true
-  },
-
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
     hidden: true
   },
 
@@ -51,34 +45,60 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '系统首页', icon: 'dashboard' }
+      meta: {
+        title: '系统首页',
+        icon: 'dashboard',
+        roles: ['admin']
+      }
     }]
   },
 
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
+  }
+
+]
+
+/**
+ * asyncRoutes
+ * 需要根据用户角色动态加载的路由
+ */
+export const asyncRoutes = [
   {
     path: '/account',
     component: Layout,
     redirect: '/account/list',
     name: 'Account',
-    meta: { title: '账户中心', icon: 'people' },
+    meta: { title: '账户中心', icon: 'people', roles: ['admin'] },
     children: [
       {
         path: 'add',
         name: 'add',
         component: () => import('@/views/account/add'),
-        meta: { title: '添加用户' }
+        meta: {
+          title: '添加用户',
+          roles: ['admin']
+        }
       },
       {
         path: 'list',
         name: 'list',
         component: () => import('@/views/account/list'),
-        meta: { title: '用户列表' }
+        meta: {
+          title: '用户列表',
+          roles: ['admin']
+        }
       },
       {
         path: 'info',
         name: 'Info',
         component: () => import('@/views/account/info'),
-        meta: { title: '账户信息' }
+        meta: {
+          title: '账户信息',
+          roles: ['account']
+        }
       }
     ]
   },
@@ -88,26 +108,26 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/advert/list',
     name: 'Advert',
-    meta: { title: '推广广告', icon: 'example' },
+    meta: { title: '推广广告', icon: 'example', roles: ['admin'] },
     children: [
       {
         path: 'add',
         name: 'Add',
         component: () => import('@/views/advert/add'),
-        meta: { title: '添加广告' },
+        meta: { title: '添加广告', roles: ['admin'] },
         hidden: true
       },
       {
         path: 'list',
         name: 'List',
         component: () => import('@/views/advert/list'),
-        meta: { title: '广告列表' }
+        meta: { title: '广告列表', roles: ['admin'] }
       },
       {
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/advert/list'),
-        meta: { title: '结构树' }
+        meta: { title: '结构树', roles: ['admin'] }
       }
     ]
   },
@@ -123,8 +143,9 @@ export const constantRoutes = [
     ]
   },
 
-  // 404 page must be placed at the end !!!
+  // 404页必须放在最后！
   { path: '*', redirect: '/404', hidden: true }
+
 ]
 
 const createRouter = () => new Router({
