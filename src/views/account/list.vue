@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <el-button type="primary">合作商户列表</el-button>
-
     <el-table :data="accountList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">{{ scope.row.id }}</template>
@@ -63,8 +62,12 @@
 
     <el-dialog :visible.sync="dialogVisible" title="编辑用户信息">
       <el-form :model="account" label-width="120px" label-position="left">
-        <el-form-item label="商户名称">
+        <el-form-item label="账户名称">
           <el-input v-model="account.name" placeholder="账户名称" />
+        </el-form-item>
+        <el-form-item label="账户类型">
+          <el-tag v-if="account.type === 1" type="success">管理员</el-tag>
+          <el-tag v-if="account.type === 2" type="danger">合作商户</el-tag>
         </el-form-item>
         <el-form-item label="手机号">
           <el-input v-model="account.mobile" placeholder="手机号" />
@@ -97,8 +100,9 @@ export default {
       account: {
         id: '',
         name: '',
+        type: '',
+        account: '',
         mobile: '',
-        fee: '',
         password: ''
       },
       accountList: [],
@@ -120,14 +124,15 @@ export default {
     },
     handleEdit(data) {
       this.account.id = data.id
-      this.account.name = data.company
+      this.account.name = data.name
+      this.account.type = data.type
+      this.account.account = data.account
       this.account.mobile = data.mobile
-      this.account.fee = data.fee
       this.dialogVisible = true
     },
     async handleOk() {
       const res = await edit(this.account)
-      if (res.code === 20000) {
+      if (res.code === 200) {
         this.$message({
           type: 'success',
           message: res.message
@@ -144,7 +149,7 @@ export default {
       })
         .then(async() => {
           const res = await lockStatus({ id: row.id })
-          if (res.code === 20000) {
+          if (res.code === 200) {
             this.$message({
               type: 'success',
               message: res.message
