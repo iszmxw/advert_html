@@ -4,6 +4,7 @@
     class="panel-group"
   >
     <el-col
+      v-permission="['isadmin']"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -33,6 +34,7 @@
       </div>
     </el-col>
     <el-col
+      v-permission="['isadmin']"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -62,6 +64,7 @@
       </div>
     </el-col>
     <el-col
+      v-permission="['isadmin']"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -91,6 +94,7 @@
       </div>
     </el-col>
     <el-col
+      v-permission="['isadmin']"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -121,6 +125,7 @@
     </el-col>
 
     <el-col
+      v-permission="['isaccount']"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -151,6 +156,7 @@
     </el-col>
 
     <el-col
+      v-permission="['isaccount']"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -181,6 +187,7 @@
     </el-col>
 
     <el-col
+      v-permission="['isaccount']"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -211,6 +218,7 @@
     </el-col>
 
     <el-col
+      v-permission="['isaccount']"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -245,10 +253,12 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 export default {
   components: {
     CountTo
   },
+  directives: { permission },
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
