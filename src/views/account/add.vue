@@ -4,7 +4,7 @@
       <el-form
         ref="form"
         :model="form"
-        label-width="90px"
+        label-width="100px"
         style="display: inline-block"
       >
         <el-form-item label="账户类型">
@@ -13,7 +13,7 @@
             placeholder="请选择账户类型"
           >
             <el-option
-              label="商户"
+              label="广告主"
               :value="0"
             />
             <el-option
@@ -24,10 +24,10 @@
         </el-form-item>
         <el-col :lg="24">
           <el-col :lg="12">
-            <el-form-item :label="form.type===0?'商户名称':'管理员名称'">
+            <el-form-item :label="form.type===0?'广告主名称':'管理员名称'">
               <el-input
                 v-model="form.name"
-                :placeholder="form.type===0?'请输入商户的名称':'请输入管理员名称'"
+                :placeholder="form.type===0?'请输入广告主的名称':'请输入管理员名称'"
               />
             </el-form-item>
           </el-col>
@@ -35,10 +35,10 @@
 
         <el-col :lg="24">
           <el-col :lg="12">
-            <el-form-item :label="form.type===0?'商户账号':'管理员账号'">
+            <el-form-item :label="form.type===0?'广告主账户名':'管理员账号'">
               <el-input
                 v-model="form.account"
-                placeholder="请输入商户的账号，用来登录系统"
+                :placeholder="form.type===0?'请输入广告主的账号，用来登录系统':'请输入管理员的账号，用来登录系统'"
               />
             </el-form-item>
           </el-col>

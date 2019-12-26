@@ -70,3 +70,12 @@ export function dashboard(data) {
     data
   })
 }
+
+// 获取账户信息
+export function getAccountInfo(data) {
+  return request({
+    url: '/account/info',
+    method: 'post',
+    data
+  })
+}
