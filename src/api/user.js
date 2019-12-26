@@ -61,3 +61,12 @@ export function lockStatus(data) {
     data
   })
 }
+
+// 系统首页
+export function dashboard(data) {
+  return request({
+    url: '/dashboard',
+    method: 'post',
+    data
+  })
+}

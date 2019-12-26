@@ -26,7 +26,7 @@
           </div>
           <count-to
             :start-val="0"
-            :end-val="102400"
+            :end-val="data.account_num"
             :duration="2600"
             class="card-panel-num"
           />
@@ -56,7 +56,7 @@
           </div>
           <count-to
             :start-val="0"
-            :end-val="81212"
+            :end-val="data.advert_num"
             :duration="3000"
             class="card-panel-num"
           />
@@ -86,7 +86,7 @@
           </div>
           <count-to
             :start-val="0"
-            :end-val="13600"
+            :end-val="data.adverting_num"
             :duration="3600"
             class="card-panel-num"
           />
@@ -116,7 +116,7 @@
           </div>
           <count-to
             :start-val="0"
-            :end-val="9280"
+            :end-val="data.unadvert_num"
             :duration="3200"
             class="card-panel-num"
           />
@@ -147,7 +147,7 @@
           </div>
           <count-to
             :start-val="0"
-            :end-val="102400"
+            :end-val="data.view_num"
             :duration="2600"
             class="card-panel-num"
           />
@@ -178,7 +178,7 @@
           </div>
           <count-to
             :start-val="0"
-            :end-val="81212"
+            :end-val="data.click_num"
             :duration="3000"
             class="card-panel-num"
           />
@@ -209,7 +209,7 @@
           </div>
           <count-to
             :start-val="0"
-            :end-val="9280"
+            :end-val="data.spend"
             :duration="3200"
             class="card-panel-num"
           />
@@ -240,7 +240,7 @@
           </div>
           <count-to
             :start-val="0"
-            :end-val="13600"
+            :end-val="data.click_avg"
             :duration="3600"
             class="card-panel-num"
           />
@@ -254,14 +254,39 @@
 <script>
 import CountTo from 'vue-count-to'
 import permission from '@/directive/permission/index.js' // 权限判断指令
+import { dashboard } from '@/api/user'
 export default {
   components: {
     CountTo
   },
   directives: { permission },
+  data() {
+    return {
+      data: {
+        account_num: 0,
+        advert_num: 0,
+        adverting_num: 0,
+        unadvert_num: 0,
+        view_num: 0,
+        click_num: 0,
+        spend: 0,
+        click_avg: 0
+      }
+    }
+  },
+  created() {
+    this.getData()
+  },
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
+    },
+    getData() {
+      dashboard().then(res => {
+        if (res.code === 200) {
+          this.data = res.data
+        }
+      })
     }
   }
 }
