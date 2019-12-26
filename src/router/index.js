@@ -108,44 +108,55 @@ export const asyncRoutes = [{
 {
   path: '/advert',
   component: Layout,
-  redirect: '/advert/list',
+  redirect: '/advert/plan_list',
   name: 'Advert',
   alwaysShow: true,
   meta: {
-    title: '推广广告',
+    title: '推广管理',
     icon: 'example',
     roles: ['isadmin', 'isaccount']
   },
   children: [{
-    path: 'add',
-    name: 'Add',
-    component: () => import('@/views/advert/add'),
+    path: 'plan_list',
+    name: 'plan_list',
+    component: () => import('@/views/advert/plan_list'),
     meta: {
-      title: '添加广告',
+      title: '广告计划',
       roles: ['isaccount']
     }
   },
   {
-    path: 'list',
-    name: 'List',
-    component: () => import('@/views/advert/list'),
+    path: 'plan_add',
+    name: 'plan_add',
+    component: () => import('@/views/advert/plan_add'),
+    hidden: true,
     meta: {
-      title: '广告列表',
+      title: '新增推广计划',
       roles: ['isaccount']
     }
   },
   {
-    path: 'tree',
-    name: 'Tree',
-    component: () => import('@/views/advert/list'),
+    path: 'unit_list',
+    name: 'unit_list',
+    component: () => import('@/views/advert/unit_list'),
+    hidden: true,
     meta: {
-      title: '结构树',
-      roles: ['isadmin']
+      title: '单元列表',
+      roles: ['isaccount']
+    }
+  },
+  {
+    path: 'idea_list',
+    name: 'idea_list',
+    component: () => import('@/views/advert/idea_list'),
+    hidden: true,
+    meta: {
+      title: '创意列表',
+      roles: ['isaccount']
     }
   }
   ]
 },
-
 {
   path: 'external-link',
   component: Layout,
