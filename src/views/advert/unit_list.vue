@@ -38,69 +38,70 @@
     </router-link>
 
     <el-table
-      :data="merchantList"
+      :data="unitList"
       style="width: 100%;margin-top:30px;"
       border
     >
       <el-table-column
         align="center"
-        label="商户ID"
+        label="单元ID"
         width="80"
       >
         <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="商户名称"
+        label="单元名称"
       >
-        <template slot-scope="scope">{{ scope.row.company }}</template>
+        <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="商户账号"
+        label="类型"
       >
-        <template slot-scope="scope">{{ scope.row.username }}</template>
+        <template slot-scope="scope">
+          <el-tag
+            v-if="scope.row.type == 1"
+            type="success"
+          >信息流列表页</el-tag>
+          <el-tag
+            v-if="scope.row.type == 2"
+            type="success"
+          >信息流详情页</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="手机号"
+        label="所属计划"
       >
-        <template slot-scope="scope">{{ scope.row.mobile }}</template>
+        <template slot-scope="scope">{{ scope.row.plan_name }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="余额"
+        label="出价"
       >
-        <template slot-scope="scope">{{ scope.row.amount / 100 }} 元</template>
-      </el-table-column>
-      <el-table-column
-        align="header-center"
-        label="提现手续"
-        width="80"
-      >
-        <template slot-scope="scope">{{ scope.row.fee }} %</template>
+        <template slot-scope="scope">{{ scope.row.price /100 }}元</template>
       </el-table-column>
       <el-table-column
         align="header-center"
         label="状态"
-        width="90"
       >
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.status == 1"
             type="success"
             disabled
-          >正常</el-button>
+          >已开启</el-button>
           <el-button
             v-else
             type="danger"
             disabled
-          >冻结</el-button>
+          >待开启</el-button>
         </template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="注册时间"
+        label="添加时间"
       >
         <template slot-scope="scope">{{ scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</template>
       </el-table-column>
@@ -116,17 +117,10 @@
             @click="handleEdit(scope.row)"
           >编辑</el-button>
           <el-button
-            v-if="scope.row.status == 1"
             type="danger"
             size="small"
-            @click="handleLock(scope)"
-          >冻结</el-button>
-          <el-button
-            v-else
-            type="success"
-            size="small"
-            @click="handleLock(scope)"
-          >解冻</el-button>
+            @click="handelDelete(scope)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -141,38 +135,53 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
-      title="编辑合作商户"
+      title="编辑单元信息"
+      width="30%"
     >
       <el-form
-        :model="merchant"
+        :model="unitdata"
         label-width="120px"
         label-position="left"
       >
-        <el-form-item label="商户名称">
-          <el-input
-            v-model="merchant.name"
-            placeholder="商户名称"
-          />
-        </el-form-item>
-        <el-form-item label="手机号">
-          <el-input
-            v-model="merchant.mobile"
-            placeholder="手机号"
-          />
-        </el-form-item>
-        <el-form-item label="修改手续费费率">
-          <el-input
-            v-model="merchant.fee"
-            placeholder="费率"
+        <el-form-item label="所属计划">
+          <el-select
+            v-model="unitdata.plan_id"
+            placeholder="请选择计划"
           >
-            <template slot="append">%</template>
-          </el-input>
+            <el-option
+              v-for="item in plan_options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="重置商户密码">
+        <el-form-item label="单元名称">
           <el-input
-            v-model="merchant.password"
-            placeholder="密码"
+            v-model="unitdata.name"
+            placeholder="单元名称"
           />
+        </el-form-item>
+        <el-form-item label="请选择广告类型">
+          <el-select
+            v-model="unitdata.type"
+            placeholder="请选择广告类型"
+          >
+            <el-option
+              v-for="item in type_options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="出价">
+          <el-input
+            v-model="unitdata.price"
+            placeholder="出价"
+          >
+            <template slot="append">元</template>
+          </el-input>
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
@@ -190,7 +199,7 @@
 </template>
 
 <script>
-import { getList, edit, lockStatus } from '@/api/user'
+import { unit_list, unit_delete, unit_edit, plan_list_data } from '@/api/advert'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -203,43 +212,56 @@ export default {
         page: 1,
         limit: 10
       },
-      merchant: {
+      plan_options: [],
+      type_options: [{
+        value: 1,
+        label: '信息流列表页'
+      }, {
+        value: 2,
+        label: '信息流详情页'
+      }],
+      unitdata: {
         id: '',
+        plan_id: '',
         name: '',
-        mobile: '',
-        fee: '',
-        password: ''
+        type: '',
+        price: ''
       },
-      merchantList: [],
-      dialogVisible: false,
-      defaultProps: {
-        children: 'children',
-        label: 'title'
-      }
+      unitList: [],
+      dialogVisible: false
     }
   },
   created() {
-    // this.getList()
+    this.getList()
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
     },
+    plan_list_data() {
+      plan_list_data().then(res => {
+        if (res.code === 200) {
+          this.plan_options = res.data
+        }
+      })
+    },
     async getList() {
-      const res = await getList(this.listQuery)
-      this.merchantList = res.data.data
+      const res = await unit_list(this.listQuery)
+      this.unitList = res.data.data
       this.total = res.data.total
     },
     handleEdit(data) {
-      this.merchant.id = data.id
-      this.merchant.name = data.company
-      this.merchant.mobile = data.mobile
-      this.merchant.fee = data.fee
+      this.plan_list_data()
+      this.unitdata.id = data.id
+      this.unitdata.plan_id = data.plan_id
+      this.unitdata.name = data.name
+      this.unitdata.type = data.type
+      this.unitdata.price = data.price / 100
       this.dialogVisible = true
     },
     async handleOk() {
-      const res = await edit(this.merchant)
-      if (res.code === 20000) {
+      const res = await unit_edit(this.unitdata)
+      if (res.code === 200) {
         this.$message({
           type: 'success',
           message: res.message
@@ -248,15 +270,15 @@ export default {
         this.getList()
       }
     },
-    handleLock({ $index, row }) {
-      this.$confirm('确定要冻结该商户吗?', '温馨提示', {
+    handelDelete({ $index, row }) {
+      this.$confirm('确定要删除该单元吗?', '温馨提示', {
         confirmButtonText: 'OK',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(async() => {
-          const res = await lockStatus({ id: row.id })
-          if (res.code === 20000) {
+          const res = await unit_delete({ id: row.id })
+          if (res.code === 200) {
             this.$message({
               type: 'success',
               message: res.message

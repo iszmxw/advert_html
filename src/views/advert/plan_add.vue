@@ -35,7 +35,7 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="* 投放预算(元/天)">
-              <el-input v-model="form.price" placeholder="请输入投放预算">
+              <el-input v-model="form.budget" placeholder="请输入投放预算">
                 <template slot="append">元</template>
               </el-input>
             </el-form-item>
@@ -63,7 +63,7 @@ export default {
       form: {
         name: '',
         date: '',
-        price: ''
+        budget: ''
       }
     }
   },

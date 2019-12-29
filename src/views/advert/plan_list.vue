@@ -116,10 +116,10 @@
           >冻结</el-button>
           <el-button
             v-else
-            type="success"
+            type="danger"
             size="small"
             @click="handleLock(scope)"
-          >解冻</el-button>
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -181,7 +181,7 @@
 </template>
 
 <script>
-import { get_plan_list } from '@/api/advert'
+import { get_plan_list, plan_edit, plan_delete } from '@/api/advert'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -197,7 +197,7 @@ export default {
       plan: {
         id: '',
         name: '',
-        date: '',
+        date: [],
         budget: ''
       },
       planList: [],
@@ -218,14 +218,15 @@ export default {
     },
     handleEdit(data) {
       this.plan.id = data.id
-      this.plan.name = data.company
-      this.plan.mobile = data.mobile
-      this.plan.fee = data.fee
+      this.plan.name = data.name
+      this.plan.date[0] = data.start_time
+      this.plan.date[1] = data.end_time
+      this.plan.budget = data.budget / 100
       this.dialogVisible = true
     },
     async handleOk() {
-      const res = await edit(this.plan)
-      if (res.code === 20000) {
+      const res = await plan_edit(this.plan)
+      if (res.code === 200) {
         this.$message({
           type: 'success',
           message: res.message
@@ -235,14 +236,14 @@ export default {
       }
     },
     handleLock({ $index, row }) {
-      this.$confirm('确定要冻结该商户吗?', '温馨提示', {
+      this.$confirm('确定要删除该计划吗?', '温馨提示', {
         confirmButtonText: 'OK',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(async() => {
-          const res = await lockStatus({ id: row.id })
-          if (res.code === 20000) {
+          const res = await plan_delete({ id: row.id })
+          if (res.code === 200) {
             this.$message({
               type: 'success',
               message: res.message

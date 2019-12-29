@@ -36,7 +36,7 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="广告类型 ">
-              <el-select v-model="form.type_id" placeholder="请选择广告类型">
+              <el-select v-model="form.type" placeholder="请选择广告类型">
                 <el-option
                   v-for="item in type_options"
                   :key="item.value"
@@ -79,21 +79,12 @@
 </template>
 
 <script>
-import { add } from '@/api/user'
+import { plan_list_data, unit_add } from '@/api/advert'
 
 export default {
   data() {
     return {
-      plan_options: [{
-        value: 1,
-        label: 'A计划'
-      }, {
-        value: 2,
-        label: 'B计划'
-      }, {
-        value: 3,
-        label: 'C计划'
-      }],
+      plan_options: [],
       type_options: [{
         value: 1,
         label: '信息流列表页'
@@ -104,22 +95,32 @@ export default {
       form: {
         plan_id: '',
         name: '',
-        type_id: '',
+        type: '',
         price: ''
       }
     }
   },
+  created() {
+    this.plan_list_data()
+  },
   methods: {
+    plan_list_data() {
+      plan_list_data().then(res => {
+        if (res.code === 200) {
+          this.plan_options = res.data
+        }
+      })
+    },
     onSubmit() {
-      add(this.form).then(res => {
-        if (res.code === 20000) {
+      unit_add(this.form).then(res => {
+        if (res.code === 200) {
           this.$notify({
             title: '成功',
             message: res.message,
             type: 'success'
           })
           this.$router.push({
-            path: '/merchant/list'
+            path: '/advert/unit_list'
           })
         } else {
           this.$notify.error({
