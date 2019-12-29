@@ -145,11 +145,31 @@ export const asyncRoutes = [{
     }
   },
   {
+    path: 'unit_add',
+    name: 'unit_add',
+    component: () => import('@/views/advert/unit_add'),
+    hidden: true,
+    meta: {
+      title: '新增广告单元',
+      roles: ['isaccount']
+    }
+  },
+  {
     path: 'idea_list',
     name: '广告创意',
     component: () => import('@/views/advert/idea_list'),
     meta: {
       title: '广告创意',
+      roles: ['isaccount']
+    }
+  },
+  {
+    path: 'idea_add',
+    name: 'idea_add',
+    component: () => import('@/views/advert/idea_add'),
+    hidden: true,
+    meta: {
+      title: '新增广告创意',
       roles: ['isaccount']
     }
   }

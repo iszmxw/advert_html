@@ -13,7 +13,7 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="* 广告计划名称">
-              <el-input v-model="form.username" placeholder="请输入商户的账号，用来登录系统" />
+              <el-input v-model="form.name" placeholder="请输入商户的账号，用来登录系统" />
             </el-form-item>
           </el-col>
         </el-col>
@@ -21,7 +21,13 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="* 投放日期">
-              <el-input v-model="form.mobile" placeholder="手机号码，可以为空，由商户自行补充" />
+              <el-date-picker
+                v-model="form.date"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              />
             </el-form-item>
           </el-col>
         </el-col>
@@ -29,8 +35,8 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="* 投放预算(元/天)">
-              <el-input v-model="form.fee" placeholder="提现手续费，如果不设置的话则为0">
-                <template slot="append">%</template>
+              <el-input v-model="form.price" placeholder="请输入投放预算">
+                <template slot="append">元</template>
               </el-input>
             </el-form-item>
           </el-col>
@@ -49,31 +55,29 @@
 </template>
 
 <script>
-import { add } from '@/api/user'
+import { plan_add } from '@/api/advert'
 
 export default {
   data() {
     return {
       form: {
-        company: '',
-        username: '',
-        mobile: '',
-        fee: '',
-        password: ''
+        name: '',
+        date: '',
+        price: ''
       }
     }
   },
   methods: {
     onSubmit() {
-      add(this.form).then(res => {
-        if (res.code === 20000) {
+      plan_add(this.form).then(res => {
+        if (res.code === 200) {
           this.$notify({
             title: '成功',
             message: res.message,
             type: 'success'
           })
           this.$router.push({
-            path: '/merchant/list'
+            path: '/advert/plan_list'
           })
         } else {
           this.$notify.error({

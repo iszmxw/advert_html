@@ -39,47 +39,40 @@
     </router-link>
 
     <el-table
-      :data="merchantList"
+      :data="planList"
       style="width: 100%;margin-top:30px;"
       border
     >
       <el-table-column
         align="center"
-        label="商户ID"
+        label="计划ID"
         width="80"
       >
         <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="商户名称"
+        label="计划名称"
       >
-        <template slot-scope="scope">{{ scope.row.company }}</template>
+        <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="商户账号"
+        label="开始日期"
       >
-        <template slot-scope="scope">{{ scope.row.username }}</template>
+        <template slot-scope="scope">{{ scope.row.start_time }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="手机号"
+        label="结束日期"
       >
-        <template slot-scope="scope">{{ scope.row.mobile }}</template>
+        <template slot-scope="scope">{{ scope.row.end_time }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="余额"
+        label="投放预算"
       >
-        <template slot-scope="scope">{{ scope.row.amount / 100 }} 元</template>
-      </el-table-column>
-      <el-table-column
-        align="header-center"
-        label="提现手续"
-        width="80"
-      >
-        <template slot-scope="scope">{{ scope.row.fee }} %</template>
+        <template slot-scope="scope">{{ scope.row.budget / 100 }} 元</template>
       </el-table-column>
       <el-table-column
         align="header-center"
@@ -101,7 +94,7 @@
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="注册时间"
+        label="添加时间"
       >
         <template slot-scope="scope">{{ scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</template>
       </el-table-column>
@@ -191,7 +184,7 @@
 </template>
 
 <script>
-import { getList, edit, lockStatus } from '@/api/user'
+import { get_plan_list } from '@/api/advert'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -211,7 +204,7 @@ export default {
         fee: '',
         password: ''
       },
-      merchantList: [],
+      planList: [],
       dialogVisible: false,
       defaultProps: {
         children: 'children',
@@ -220,15 +213,15 @@ export default {
     }
   },
   created() {
-    // this.getList()
+    this.getList()
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
     },
     async getList() {
-      const res = await getList(this.listQuery)
-      this.merchantList = res.data.data
+      const res = await get_plan_list(this.listQuery)
+      this.planList = res.data.data
       this.total = res.data.total
     },
     handleEdit(data) {

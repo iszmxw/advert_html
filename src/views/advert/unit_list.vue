@@ -30,7 +30,12 @@
     </el-menu>
     <br>
     <br>
-    <el-button type="primary">新增单元</el-button>
+    <router-link
+      tag="a"
+      :to="'/advert/unit_add'"
+    >
+      <el-button type="primary">新增单元</el-button>
+    </router-link>
 
     <el-table
       :data="merchantList"
@@ -214,7 +219,7 @@ export default {
     }
   },
   created() {
-    this.getList()
+    // this.getList()
   },
   methods: {
     handleSelect(key, keyPath) {

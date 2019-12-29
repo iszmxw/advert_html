@@ -4,42 +4,64 @@
       <el-form ref="form" :model="form" label-width="90px" style="display: inline-block">
         <el-col :lg="24">
           <el-col :lg="12">
-            <el-form-item label="商户名称">
-              <el-input v-model="form.company" placeholder="请输入商户的名称" />
+            <el-form-item label="所属计划">
+              <el-select v-model="form.plan_id" placeholder="请选择计划">
+                <el-option
+                  v-for="item in plan_options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-col>
 
         <el-col :lg="24">
           <el-col :lg="12">
-            <el-form-item label="商户账号">
-              <el-input v-model="form.username" placeholder="请输入商户的账号，用来登录系统" />
+            <el-form-item label="单元名称">
+              <el-input v-model="form.name" placeholder="请输入单元名称" />
             </el-form-item>
           </el-col>
         </el-col>
 
         <el-col :lg="24">
           <el-col :lg="12">
-            <el-form-item label="手机号码">
-              <el-input v-model="form.mobile" placeholder="手机号码，可以为空，由商户自行补充" />
+            <el-form-item label="投放目的">
+              <el-tag>点击</el-tag>
             </el-form-item>
           </el-col>
         </el-col>
 
         <el-col :lg="24">
           <el-col :lg="12">
-            <el-form-item label="提现手续费">
-              <el-input v-model="form.fee" placeholder="提现手续费，如果不设置的话则为0">
-                <template slot="append">%</template>
+            <el-form-item label="广告类型 ">
+              <el-select v-model="form.type_id" placeholder="请选择广告类型">
+                <el-option
+                  v-for="item in type_options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-col>
+
+        <el-col :lg="24">
+          <el-col :lg="12">
+            <el-form-item label="付费方式">
+              <el-tag>CPC</el-tag>
+            </el-form-item>
+          </el-col>
+        </el-col>
+
+        <el-col :lg="24">
+          <el-col :lg="12">
+            <el-form-item label="出价">
+              <el-input v-model="form.price" placeholder="请输入出价">
+                <template slot="append">元</template>
               </el-input>
-            </el-form-item>
-          </el-col>
-        </el-col>
-
-        <el-col :lg="24">
-          <el-col :lg="12">
-            <el-form-item label="登录密码">
-              <el-input v-model="form.password" placeholder="请输入商户的登录密码" />
             </el-form-item>
           </el-col>
         </el-col>
@@ -62,12 +84,28 @@ import { add } from '@/api/user'
 export default {
   data() {
     return {
+      plan_options: [{
+        value: 1,
+        label: 'A计划'
+      }, {
+        value: 2,
+        label: 'B计划'
+      }, {
+        value: 3,
+        label: 'C计划'
+      }],
+      type_options: [{
+        value: 1,
+        label: '信息流列表页'
+      }, {
+        value: 2,
+        label: '信息流详情页'
+      }],
       form: {
-        company: '',
-        username: '',
-        mobile: '',
-        fee: '',
-        password: ''
+        plan_id: '',
+        name: '',
+        type_id: '',
+        price: ''
       }
     }
   },
