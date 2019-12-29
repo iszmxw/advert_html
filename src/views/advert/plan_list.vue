@@ -77,19 +77,18 @@
       <el-table-column
         align="header-center"
         label="状态"
-        width="90"
       >
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.status == 1"
             type="success"
             disabled
-          >正常</el-button>
+          >已开启</el-button>
           <el-button
             v-else
             type="danger"
             disabled
-          >冻结</el-button>
+          >待开启</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -135,38 +134,36 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
-      title="编辑合作商户"
+      title="编辑广告计划"
     >
       <el-form
-        :model="merchant"
+        :model="plan"
         label-width="120px"
         label-position="left"
       >
-        <el-form-item label="商户名称">
+        <el-form-item label="计划名称">
           <el-input
-            v-model="merchant.name"
-            placeholder="商户名称"
+            v-model="plan.name"
+            placeholder="计划名称"
           />
         </el-form-item>
-        <el-form-item label="手机号">
-          <el-input
-            v-model="merchant.mobile"
-            placeholder="手机号"
+        <el-form-item label="投放日期">
+          <el-date-picker
+            v-model="plan.date"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
           />
         </el-form-item>
-        <el-form-item label="修改手续费费率">
+        </el-form-item>
+        <el-form-item label="投放预算">
           <el-input
-            v-model="merchant.fee"
-            placeholder="费率"
+            v-model="plan.budget"
+            placeholder="投放预算"
           >
-            <template slot="append">%</template>
+            <template slot="append">元</template>
           </el-input>
-        </el-form-item>
-        <el-form-item label="重置商户密码">
-          <el-input
-            v-model="merchant.password"
-            placeholder="密码"
-          />
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
@@ -197,19 +194,14 @@ export default {
         page: 1,
         limit: 10
       },
-      merchant: {
+      plan: {
         id: '',
         name: '',
-        mobile: '',
-        fee: '',
-        password: ''
+        date: '',
+        budget: ''
       },
       planList: [],
-      dialogVisible: false,
-      defaultProps: {
-        children: 'children',
-        label: 'title'
-      }
+      dialogVisible: false
     }
   },
   created() {
@@ -225,14 +217,14 @@ export default {
       this.total = res.data.total
     },
     handleEdit(data) {
-      this.merchant.id = data.id
-      this.merchant.name = data.company
-      this.merchant.mobile = data.mobile
-      this.merchant.fee = data.fee
+      this.plan.id = data.id
+      this.plan.name = data.company
+      this.plan.mobile = data.mobile
+      this.plan.fee = data.fee
       this.dialogVisible = true
     },
     async handleOk() {
-      const res = await edit(this.merchant)
+      const res = await edit(this.plan)
       if (res.code === 20000) {
         this.$message({
           type: 'success',
