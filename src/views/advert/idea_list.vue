@@ -39,69 +39,73 @@
     </router-link>
 
     <el-table
-      :data="merchantList"
+      :data="ideaList"
       style="width: 100%;margin-top:30px;"
       border
     >
       <el-table-column
         align="center"
-        label="商户ID"
+        label="创意ID"
         width="80"
       >
         <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="商户名称"
+        label="所属计划"
       >
-        <template slot-scope="scope">{{ scope.row.company }}</template>
+        <template slot-scope="scope">{{ scope.row.plan_name }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="商户账号"
+        label="所属单元"
       >
-        <template slot-scope="scope">{{ scope.row.username }}</template>
+        <template slot-scope="scope">{{ scope.row.unit_name }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="手机号"
+        label="创意名称"
       >
-        <template slot-scope="scope">{{ scope.row.mobile }}</template>
+        <template slot-scope="scope">{{ scope.row.idea_name }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="余额"
+        label="链接地址"
       >
-        <template slot-scope="scope">{{ scope.row.amount / 100 }} 元</template>
+        <template slot-scope="scope">{{ scope.row.link }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="提现手续"
-        width="80"
+        label="广告创意标题"
       >
-        <template slot-scope="scope">{{ scope.row.fee }} %</template>
+        <template slot-scope="scope">{{ scope.row.advert_name }}</template>
+      </el-table-column>
+      <el-table-column
+        align="header-center"
+        label="广告图片"
+      >
+        <template slot-scope="scope">{{ scope.row.images }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
         label="状态"
-        width="90"
       >
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.status == 1"
             type="success"
             disabled
-          >正常</el-button>
+          >已开启</el-button>
           <el-button
             v-else
             type="danger"
             disabled
-          >冻结</el-button>
+          >待开启</el-button>
         </template>
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="注册时间"
+        label="添加时间"
       >
         <template slot-scope="scope">{{ scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</template>
       </el-table-column>
@@ -117,17 +121,10 @@
             @click="handleEdit(scope.row)"
           >编辑</el-button>
           <el-button
-            v-if="scope.row.status == 1"
             type="danger"
             size="small"
-            @click="handleLock(scope)"
-          >冻结</el-button>
-          <el-button
-            v-else
-            type="success"
-            size="small"
-            @click="handleLock(scope)"
-          >解冻</el-button>
+            @click="handleDelete(scope)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -142,37 +139,67 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
-      title="编辑合作商户"
+      title="编辑广告创意"
     >
       <el-form
-        :model="merchant"
+        :model="ideaData"
         label-width="120px"
         label-position="left"
       >
-        <el-form-item label="商户名称">
-          <el-input
-            v-model="merchant.name"
-            placeholder="商户名称"
-          />
-        </el-form-item>
-        <el-form-item label="手机号">
-          <el-input
-            v-model="merchant.mobile"
-            placeholder="手机号"
-          />
-        </el-form-item>
-        <el-form-item label="修改手续费费率">
-          <el-input
-            v-model="merchant.fee"
-            placeholder="费率"
+        <el-form-item label="所属计划">
+          <el-select
+            v-model="ideaData.plan_id"
+            placeholder="请选择计划"
+            @change="unit_list_data"
           >
-            <template slot="append">%</template>
+            <el-option
+              v-for="item in plan_options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所属单元">
+          <el-select
+            v-model="ideaData.unit_id"
+            placeholder="请选择单元"
+          >
+            <el-option
+              v-for="item in unit_options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="创意名称">
+          <el-input
+            v-model="ideaData.idea_name"
+            placeholder="请输入创意名称"
+          />
+        </el-form-item>
+        <el-form-item label="广告链接地址">
+          <el-input
+            v-model="ideaData.link"
+            placeholder="请输入广告链接地址"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-link"
+            />
           </el-input>
         </el-form-item>
-        <el-form-item label="重置商户密码">
+        <el-form-item label="广告标题">
           <el-input
-            v-model="merchant.password"
-            placeholder="密码"
+            v-model="ideaData.advert_name"
+            placeholder="请输入广告标题"
+          />
+        </el-form-item>
+        <el-form-item label="图片">
+          <el-input
+            v-model="ideaData.images"
+            placeholder="请上传图片"
           />
         </el-form-item>
       </el-form>
@@ -191,7 +218,7 @@
 </template>
 
 <script>
-import { getList, edit, lockStatus } from '@/api/user'
+import { idea_list, plan_list_data, unit_list_data, idea_edit, idea_delete } from '@/api/advert'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -204,43 +231,62 @@ export default {
         page: 1,
         limit: 10
       },
-      merchant: {
+      plan_options: [],
+      unit_options: [],
+      ideaData: {
         id: '',
-        name: '',
-        mobile: '',
-        fee: '',
-        password: ''
+        plan_id: '',
+        unit_id: '',
+        idea_name: '',
+        link: '',
+        advert_name: '',
+        images: ''
       },
-      merchantList: [],
-      dialogVisible: false,
-      defaultProps: {
-        children: 'children',
-        label: 'title'
-      }
+      ideaList: [],
+      dialogVisible: false
     }
   },
   created() {
-    // this.getList()
+    this.getList()
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
     },
+    plan_list_data() {
+      plan_list_data().then(res => {
+        if (res.code === 200) {
+          this.plan_options = res.data
+        }
+      })
+    },
+    unit_list_data(plan_id) {
+      unit_list_data({ plan_id: plan_id }).then(res => {
+        if (res.code === 200) {
+          this.ideaData.unit_id = ''
+          this.unit_options = res.data
+        }
+      })
+    },
     async getList() {
-      const res = await getList(this.listQuery)
-      this.merchantList = res.data.data
+      const res = await idea_list(this.listQuery)
+      this.ideaList = res.data.data
       this.total = res.data.total
     },
     handleEdit(data) {
-      this.merchant.id = data.id
-      this.merchant.name = data.company
-      this.merchant.mobile = data.mobile
-      this.merchant.fee = data.fee
+      this.plan_list_data()
+      this.ideaData.id = data.id
+      this.ideaData.plan_id = data.plan_id
+      this.ideaData.unit_id = data.unit_id
+      this.ideaData.idea_name = data.idea_name
+      this.ideaData.link = data.link
+      this.ideaData.advert_name = data.advert_name
+      this.ideaData.images = data.images
       this.dialogVisible = true
     },
     async handleOk() {
-      const res = await edit(this.merchant)
-      if (res.code === 20000) {
+      const res = await idea_edit(this.ideaData)
+      if (res.code === 200) {
         this.$message({
           type: 'success',
           message: res.message
@@ -249,15 +295,15 @@ export default {
         this.getList()
       }
     },
-    handleLock({ $index, row }) {
-      this.$confirm('确定要冻结该商户吗?', '温馨提示', {
+    handleDelete({ $index, row }) {
+      this.$confirm('确定要删除该广告创意吗?', '温馨提示', {
         confirmButtonText: 'OK',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(async() => {
-          const res = await lockStatus({ id: row.id })
-          if (res.code === 20000) {
+          const res = await idea_delete({ id: row.id })
+          if (res.code === 200) {
             this.$message({
               type: 'success',
               message: res.message

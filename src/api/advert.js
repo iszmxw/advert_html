@@ -36,15 +36,6 @@ export function plan_delete(data) {
   })
 }
 
-// 获取所属计划列表
-export function plan_list_data(data) {
-  return request({
-    url: '/advert/plan_list_data',
-    method: 'post',
-    data
-  })
-}
-
 // 新增广告单元
 export function unit_add(data) {
   return request({
@@ -76,6 +67,51 @@ export function unit_edit(data) {
 export function unit_list(data) {
   return request({
     url: '/advert/unit_list',
+    method: 'post',
+    data
+  })
+}
+
+// 获取所属计划列表
+export function plan_list_data(data) {
+  return request({
+    url: '/advert/plan_list_data',
+    method: 'post',
+    data
+  })
+}
+
+// 获取所属单元列表
+export function unit_list_data(data) {
+  return request({
+    url: '/advert/unit_list_data',
+    method: 'post',
+    data
+  })
+}
+
+// 新增广告创意
+export function idea_add(data) {
+  return request({
+    url: '/advert/idea_add',
+    method: 'post',
+    data
+  })
+}
+
+// 删除广告创意
+export function idea_delete(data) {
+  return request({
+    url: '/advert/idea_delete',
+    method: 'post',
+    data
+  })
+}
+
+// 广告创意列表
+export function idea_list(data) {
+  return request({
+    url: '/advert/idea_list',
     method: 'post',
     data
   })

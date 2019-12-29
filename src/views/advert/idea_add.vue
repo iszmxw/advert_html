@@ -1,11 +1,20 @@
 <template>
   <div class="app-container">
     <div class="app-wrapper">
-      <el-form ref="form" :model="form" label-width="100px" style="display: inline-block">
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="100px"
+        style="display: inline-block"
+      >
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="所属计划">
-              <el-select v-model="form.plan_id" placeholder="请选择计划">
+              <el-select
+                v-model="form.plan_id"
+                placeholder="请选择计划"
+                @change="unit_list_data"
+              >
                 <el-option
                   v-for="item in plan_options"
                   :key="item.value"
@@ -20,7 +29,10 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="所属单元">
-              <el-select v-model="form.unit_id" placeholder="请选择单元">
+              <el-select
+                v-model="form.unit_id"
+                placeholder="请选择单元"
+              >
                 <el-option
                   v-for="item in unit_options"
                   :key="item.value"
@@ -35,7 +47,10 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="创意名称">
-              <el-input v-model="form.idea_name" placeholder="请输入创意名称" />
+              <el-input
+                v-model="form.idea_name"
+                placeholder="请输入创意名称"
+              />
             </el-form-item>
           </el-col>
         </el-col>
@@ -43,8 +58,14 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="广告链接地址">
-              <el-input v-model="form.link" placeholder="请输入广告链接地址">
-                <el-button slot="append" icon="el-icon-link" />
+              <el-input
+                v-model="form.link"
+                placeholder="请输入广告链接地址"
+              >
+                <el-button
+                  slot="append"
+                  icon="el-icon-link"
+                />
               </el-input>
             </el-form-item>
           </el-col>
@@ -53,7 +74,10 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="广告标题">
-              <el-input v-model="form.advert_name" placeholder="请输入广告标题" />
+              <el-input
+                v-model="form.advert_name"
+                placeholder="请输入广告标题"
+              />
             </el-form-item>
           </el-col>
         </el-col>
@@ -61,7 +85,10 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="图片">
-              <el-input v-model="form.images" placeholder="请上传图片" />
+              <el-input
+                v-model="form.images"
+                placeholder="请上传图片"
+              />
             </el-form-item>
           </el-col>
         </el-col>
@@ -69,7 +96,10 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">立即创建</el-button>
+              <el-button
+                type="primary"
+                @click="onSubmit"
+              >立即创建</el-button>
             </el-form-item>
           </el-col>
         </el-col>
@@ -79,31 +109,13 @@
 </template>
 
 <script>
-import { add } from '@/api/user'
+import { plan_list_data, unit_list_data, idea_add } from '@/api/advert'
 
 export default {
   data() {
     return {
-      plan_options: [{
-        value: 1,
-        label: 'A计划'
-      }, {
-        value: 2,
-        label: 'B计划'
-      }, {
-        value: 3,
-        label: 'C计划'
-      }],
-      unit_options: [{
-        value: 1,
-        label: 'A单元'
-      }, {
-        value: 2,
-        label: 'B单元'
-      }, {
-        value: 3,
-        label: 'C单元'
-      }],
+      plan_options: [],
+      unit_options: [],
       form: {
         plan_id: '',
         unit_id: '',
@@ -114,17 +126,35 @@ export default {
       }
     }
   },
+  created() {
+    this.plan_list_data()
+  },
   methods: {
+    plan_list_data() {
+      plan_list_data().then(res => {
+        if (res.code === 200) {
+          this.plan_options = res.data
+        }
+      })
+    },
+    unit_list_data(plan_id) {
+      unit_list_data({ plan_id: plan_id }).then(res => {
+        if (res.code === 200) {
+          this.form.unit_id = ''
+          this.unit_options = res.data
+        }
+      })
+    },
     onSubmit() {
-      add(this.form).then(res => {
-        if (res.code === 20000) {
+      idea_add(this.form).then(res => {
+        if (res.code === 200) {
           this.$notify({
             title: '成功',
             message: res.message,
             type: 'success'
           })
           this.$router.push({
-            path: '/merchant/list'
+            path: '/advert/idea_list'
           })
         } else {
           this.$notify.error({
