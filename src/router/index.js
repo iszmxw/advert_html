@@ -137,21 +137,19 @@ export const asyncRoutes = [{
   },
   {
     path: 'unit_list',
-    name: 'unit_list',
+    name: '广告单元',
     component: () => import('@/views/advert/unit_list'),
-    hidden: true,
     meta: {
-      title: '单元列表',
+      title: '广告单元',
       roles: ['isaccount']
     }
   },
   {
     path: 'idea_list',
-    name: 'idea_list',
+    name: '广告创意',
     component: () => import('@/views/advert/idea_list'),
-    hidden: true,
     meta: {
-      title: '创意列表',
+      title: '广告创意',
       roles: ['isaccount']
     }
   }
