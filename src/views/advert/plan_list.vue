@@ -156,7 +156,6 @@
             end-placeholder="结束日期"
           />
         </el-form-item>
-        </el-form-item>
         <el-form-item label="投放预算">
           <el-input
             v-model="plan.budget"
