@@ -85,10 +85,23 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="图片">
-              <el-input
-                v-model="form.images"
-                placeholder="请上传图片"
-              />
+
+              <el-upload
+                :action="upload_url"
+                list-type="picture-card"
+                name="files"
+                :on-change="handleChange"
+                :before-upload="handleBefore"
+                :file-list="form.images"
+                :on-preview="handlePictureCardPreview"
+                :on-remove="handleRemove"
+              >
+                <i class="el-icon-plus" />
+              </el-upload>
+              <el-dialog :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl">
+              </el-dialog>
+
             </el-form-item>
           </el-col>
         </el-col>
@@ -122,8 +135,11 @@ export default {
         idea_name: '',
         link: '',
         advert_name: '',
-        images: ''
-      }
+        images: []
+      },
+      upload_url: 'http://advert.test/api/admin/advert/image_upload',
+      dialogImageUrl: '',
+      dialogVisible: false
     }
   },
   created() {
@@ -163,6 +179,16 @@ export default {
           })
         }
       })
+    },
+    handleRemove(file, images) {
+      console.log(file, images)
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handleChange(file, images) {
+      this.form.images = images
     }
   }
 }

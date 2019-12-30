@@ -84,7 +84,17 @@
         align="header-center"
         label="广告图片"
       >
-        <template slot-scope="scope">{{ scope.row.images }}</template>
+        <template slot-scope="scope">
+          <span
+            v-for="(item,index) in scope.row.complete_paths"
+            :key="index"
+          >
+            <a
+              :href="item"
+              target="_blank"
+            >查看图片{{ index + 1 }}</a><br>
+          </span>
+        </template>
       </el-table-column>
       <el-table-column
         align="header-center"
