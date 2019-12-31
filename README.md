@@ -81,7 +81,7 @@ npm run lint -- --fix
 
 ## Demo
 
-![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
+![demo](/public/images/1.png)
 
 ## Browsers support
 
