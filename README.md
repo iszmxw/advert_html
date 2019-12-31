@@ -82,6 +82,7 @@ npm run lint -- --fix
 ## Demo
 
 ![demo](/public/images/1.png)
+![demo](/public/images/2.png)
 
 ## Browsers support
 
