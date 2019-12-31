@@ -172,6 +172,16 @@ export const asyncRoutes = [{
       title: '新增广告创意',
       roles: ['isaccount']
     }
+  },
+  {
+    path: 'idea_edit',
+    name: 'idea_edit',
+    component: () => import('@/views/advert/idea_edit'),
+    hidden: true,
+    meta: {
+      title: '编辑广告创意',
+      roles: ['isaccount']
+    }
   }
   ]
 },

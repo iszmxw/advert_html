@@ -284,15 +284,22 @@ export default {
       this.total = res.data.total
     },
     handleEdit(data) {
+      window.open(window.location.origin + '/#/advert/idea_edit?id=' + data.id)
       this.plan_list_data()
-      this.ideaData.id = data.id
-      this.ideaData.plan_id = data.plan_id
-      this.ideaData.unit_id = data.unit_id
-      this.ideaData.idea_name = data.idea_name
-      this.ideaData.link = data.link
-      this.ideaData.advert_name = data.advert_name
-      this.ideaData.images = data.images
-      this.dialogVisible = true
+      // 编辑的时候获取单元信息，获取完了单元信息在进行数据渲染
+      unit_list_data({ plan_id: data.plan_id }).then(res => {
+        if (res.code === 200) {
+          this.unit_options = res.data
+          this.ideaData.id = data.id
+          this.ideaData.plan_id = data.plan_id
+          this.ideaData.unit_id = data.unit_id
+          this.ideaData.idea_name = data.idea_name
+          this.ideaData.link = data.link
+          this.ideaData.advert_name = data.advert_name
+          this.ideaData.images = data.images
+          this.dialogVisible = true
+        }
+      })
     },
     async handleOk() {
       const res = await idea_edit(this.ideaData)
