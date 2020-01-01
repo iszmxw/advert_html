@@ -14,6 +14,9 @@
           <el-button v-else type="danger" size="mini">合作商户</el-button>
         </template>
       </el-table-column>
+      <el-table-column align="header-center" label="账户余额">
+        <template slot-scope="scope">{{ scope.row.amount / 100 }} 元</template>
+      </el-table-column>
       <el-table-column align="header-center" label="登录账号">
         <template slot-scope="scope">{{ scope.row.account }}</template>
       </el-table-column>
@@ -72,6 +75,11 @@
         <el-form-item label="手机号">
           <el-input v-model="account.mobile" placeholder="手机号" />
         </el-form-item>
+        <el-form-item label="账户余额">
+          <el-input v-model="account.amount" placeholder="账户余额">
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
         <el-form-item label="重置密码">
           <el-input v-model="account.password" placeholder="密码" />
         </el-form-item>
@@ -101,9 +109,9 @@ export default {
         id: '',
         name: '',
         type: '',
+        amount: '',
         account: '',
-        mobile: '',
-        password: ''
+        mobile: ''
       },
       accountList: [],
       dialogVisible: false,
@@ -126,6 +134,7 @@ export default {
       this.account.id = data.id
       this.account.name = data.name
       this.account.type = data.type
+      this.account.amount = data.amount / 100
       this.account.account = data.account
       this.account.mobile = data.mobile
       this.dialogVisible = true

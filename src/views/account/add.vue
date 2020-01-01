@@ -14,7 +14,7 @@
           >
             <el-option
               label="广告主"
-              :value="0"
+              :value="2"
             />
             <el-option
               label="管理员"
@@ -99,7 +99,7 @@ export default {
   data() {
     return {
       form: {
-        type: 0,
+        type: 2,
         name: '',
         account: '',
         mobile: '',
