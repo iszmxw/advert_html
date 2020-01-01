@@ -122,7 +122,7 @@ export const asyncRoutes = [{
     component: () => import('@/views/advert/plan_list'),
     meta: {
       title: '广告计划',
-      roles: ['isaccount']
+      roles: ['isadmin', 'isaccount']
     }
   },
   {
@@ -141,7 +141,7 @@ export const asyncRoutes = [{
     component: () => import('@/views/advert/unit_list'),
     meta: {
       title: '广告单元',
-      roles: ['isaccount']
+      roles: ['isadmin', 'isaccount']
     }
   },
   {
@@ -160,7 +160,7 @@ export const asyncRoutes = [{
     component: () => import('@/views/advert/idea_list'),
     meta: {
       title: '广告创意',
-      roles: ['isaccount']
+      roles: ['isadmin', 'isaccount']
     }
   },
   {

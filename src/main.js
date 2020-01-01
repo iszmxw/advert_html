@@ -15,6 +15,7 @@ import router from './router'
 
 import './icons' // icon
 import './permission' // permission control
+import permission from './directive/permission/index.js'
 
 import * as filters from './filters' // global filters
 
@@ -30,6 +31,8 @@ import * as filters from './filters' // global filters
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
+
+Vue.use(permission)
 
 // register global utility filters
 Object.keys(filters).forEach(key => {

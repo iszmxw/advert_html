@@ -31,6 +31,7 @@
     <br>
     <br>
     <router-link
+      v-if="checkPermission(['isaccount'])"
       tag="a"
       :to="'/advert/unit_add'"
     >
@@ -48,6 +49,13 @@
         width="80"
       >
         <template slot-scope="scope">{{ scope.row.id }}</template>
+      </el-table-column>
+      <el-table-column
+        v-if="checkPermission(['isadmin'])"
+        align="center"
+        label="所属商户"
+      >
+        <template slot-scope="scope">{{ scope.row.account_name }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
@@ -112,11 +120,19 @@
       >
         <template slot-scope="scope">
           <el-button
+            v-if="checkPermission(['isaccount'])"
             type="primary"
             size="small"
             @click="handleEdit(scope.row)"
           >编辑</el-button>
           <el-button
+            v-if="checkPermission(['isadmin'])"
+            type="primary"
+            size="small"
+            @click="handleCheck(scope.row)"
+          >审核</el-button>
+          <el-button
+            v-if="checkPermission(['isaccount'])"
             type="danger"
             size="small"
             @click="handelDelete(scope)"
@@ -200,7 +216,8 @@
 
 <script>
 import { unit_list, unit_delete, unit_edit, plan_list_data } from '@/api/advert'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import Pagination from '@/components/Pagination' // 基于分页的二次封装
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
   components: { Pagination },
@@ -235,6 +252,7 @@ export default {
     this.getList()
   },
   methods: {
+    checkPermission,
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
     },

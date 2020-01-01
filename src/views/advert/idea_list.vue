@@ -32,6 +32,7 @@
     <br>
 
     <router-link
+      v-if="checkPermission(['isaccount'])"
       tag="a"
       :to="'/advert/idea_add'"
     >
@@ -49,6 +50,13 @@
         width="80"
       >
         <template slot-scope="scope">{{ scope.row.id }}</template>
+      </el-table-column>
+      <el-table-column
+        v-if="checkPermission(['isadmin'])"
+        align="center"
+        label="所属商户"
+      >
+        <template slot-scope="scope">{{ scope.row.account_name }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
@@ -137,11 +145,19 @@
       >
         <template slot-scope="scope">
           <el-button
+            v-if="checkPermission(['isaccount'])"
             type="primary"
             size="small"
             @click="handleEdit(scope.row)"
           >编辑</el-button>
           <el-button
+            v-if="checkPermission(['isadmin'])"
+            type="primary"
+            size="small"
+            @click="handleCheck(scope.row)"
+          >审核</el-button>
+          <el-button
+            v-if="checkPermission(['isaccount'])"
             type="danger"
             size="small"
             @click="handleDelete(scope)"
@@ -163,6 +179,7 @@
 <script>
 import { idea_list, idea_delete } from '@/api/advert'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
   components: { Pagination },
@@ -181,6 +198,7 @@ export default {
     this.getList()
   },
   methods: {
+    checkPermission,
     handleEdit(data) {
       window.open(window.location.origin + '/#/advert/idea_edit?id=' + data.id)
     },

@@ -32,6 +32,7 @@
     <br>
 
     <router-link
+      v-if="checkPermission(['isaccount'])"
       tag="a"
       :to="'/advert/plan_add'"
     >
@@ -49,6 +50,13 @@
         width="80"
       >
         <template slot-scope="scope">{{ scope.row.id }}</template>
+      </el-table-column>
+      <el-table-column
+        v-if="checkPermission(['isadmin'])"
+        align="center"
+        label="所属商户"
+      >
+        <template slot-scope="scope">{{ scope.row.account_name }}</template>
       </el-table-column>
       <el-table-column
         align="header-center"
@@ -104,21 +112,22 @@
       >
         <template slot-scope="scope">
           <el-button
+            v-if="checkPermission(['isaccount'])"
             type="primary"
             size="small"
             @click="handleEdit(scope.row)"
           >编辑</el-button>
           <el-button
-            v-if="scope.row.status == 1"
-            type="danger"
+            v-if="checkPermission(['isadmin'])"
+            type="primary"
             size="small"
-            @click="handleLock(scope)"
-          >冻结</el-button>
+            @click="handleCheck(scope.row)"
+          >审核</el-button>
           <el-button
-            v-else
+            v-if="checkPermission(['isaccount'])"
             type="danger"
             size="small"
-            @click="handleLock(scope)"
+            @click="handleDelete(scope)"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -181,7 +190,8 @@
 
 <script>
 import { get_plan_list, plan_edit, plan_delete } from '@/api/advert'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import Pagination from '@/components/Pagination' // 基于分页的二次封装
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
   components: { Pagination },
@@ -207,6 +217,7 @@ export default {
     this.getList()
   },
   methods: {
+    checkPermission,
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
     },
@@ -234,7 +245,7 @@ export default {
         this.getList()
       }
     },
-    handleLock({ $index, row }) {
+    handleDelete({ $index, row }) {
       this.$confirm('确定要删除该计划吗?', '温馨提示', {
         confirmButtonText: 'OK',
         cancelButtonText: '取消',
