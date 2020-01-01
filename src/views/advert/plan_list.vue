@@ -52,6 +52,23 @@
       </el-table-column>
       <el-table-column
         align="header-center"
+        label="状态"
+      >
+        <template slot-scope="scope">
+          <el-button
+            v-if="scope.row.status == 1"
+            type="success"
+            disabled
+          >已开启</el-button>
+          <el-button
+            v-else
+            type="danger"
+            disabled
+          >待开启</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        align="header-center"
         label="计划名称"
       >
         <template slot-scope="scope">{{ scope.row.name }}</template>
@@ -73,23 +90,6 @@
         label="投放预算"
       >
         <template slot-scope="scope">{{ scope.row.budget / 100 }} 元</template>
-      </el-table-column>
-      <el-table-column
-        align="header-center"
-        label="状态"
-      >
-        <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.status == 1"
-            type="success"
-            disabled
-          >已开启</el-button>
-          <el-button
-            v-else
-            type="danger"
-            disabled
-          >待开启</el-button>
-        </template>
       </el-table-column>
       <el-table-column
         align="header-center"
