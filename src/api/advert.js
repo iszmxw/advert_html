@@ -117,3 +117,21 @@ export function idea_list(data) {
   })
 }
 
+// 单条广告创意信息获取
+export function idea_info(data) {
+  return request({
+    url: '/advert/idea_info',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑单条广告创意信息
+export function idea_edit(data) {
+  return request({
+    url: '/advert/idea_edit',
+    method: 'post',
+    data
+  })
+}
+

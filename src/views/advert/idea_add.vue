@@ -90,6 +90,8 @@
                 :action="upload_url"
                 list-type="picture-card"
                 name="files"
+                :limit="3"
+                :on-exceed="handleExceed"
                 :on-change="handleChange"
                 :before-upload="handleBefore"
                 :file-list="form.images"
@@ -180,8 +182,8 @@ export default {
         }
       })
     },
-    handleRemove(file, images) {
-      console.log(file, images)
+    handleRemove(file, fileList) {
+      this.images = fileList
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
@@ -189,6 +191,9 @@ export default {
     },
     handleChange(file, images) {
       this.form.images = images
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
     handleBefore(file) {
       if (file.type.indexOf('image') === -1) {

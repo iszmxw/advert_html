@@ -90,6 +90,8 @@
                 :action="upload_url"
                 list-type="picture-card"
                 name="files"
+                :limit="3"
+                :on-exceed="handleExceed"
                 :on-change="handleChange"
                 :before-upload="handleBefore"
                 :file-list="form.images"
@@ -112,7 +114,7 @@
               <el-button
                 type="primary"
                 @click="onSubmit"
-              >立即创建</el-button>
+              >确认保存</el-button>
             </el-form-item>
           </el-col>
         </el-col>
@@ -122,7 +124,7 @@
 </template>
 
 <script>
-import { plan_list_data, unit_list_data, idea_add } from '@/api/advert'
+import { idea_info, plan_list_data, unit_list_data, idea_edit } from '@/api/advert'
 
 export default {
   data() {
@@ -130,6 +132,7 @@ export default {
       plan_options: [],
       unit_options: [],
       form: {
+        id: '',
         plan_id: '',
         unit_id: '',
         idea_name: '',
@@ -143,9 +146,24 @@ export default {
     }
   },
   created() {
+    this.idea_info()
     this.plan_list_data()
   },
   methods: {
+    idea_info() {
+      idea_info(this.$route.query).then(res => {
+        if (res.code === 200) {
+          this.form.id = res.data.id
+          this.form.plan_id = res.data.plan_id
+          this.form.unit_id = res.data.unit_id
+          this.form.idea_name = res.data.idea_name
+          this.form.link = res.data.link
+          this.form.advert_name = res.data.advert_name
+          this.form.images = res.data.images
+          this.unit_list_data(res.data.plan_id)
+        }
+      })
+    },
     plan_list_data() {
       plan_list_data().then(res => {
         if (res.code === 200) {
@@ -156,13 +174,12 @@ export default {
     unit_list_data(plan_id) {
       unit_list_data({ plan_id: plan_id }).then(res => {
         if (res.code === 200) {
-          this.form.unit_id = ''
           this.unit_options = res.data
         }
       })
     },
     onSubmit() {
-      idea_add(this.form).then(res => {
+      idea_edit(this.form).then(res => {
         if (res.code === 200) {
           this.$notify({
             title: '成功',
@@ -180,8 +197,8 @@ export default {
         }
       })
     },
-    handleRemove(file, images) {
-      console.log(file, images)
+    handleRemove(file, fileList) {
+      this.images = fileList
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
@@ -189,6 +206,9 @@ export default {
     },
     handleChange(file, images) {
       this.form.images = images
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
     handleBefore(file) {
       if (file.type.indexOf('image') === -1) {

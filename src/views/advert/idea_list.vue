@@ -89,10 +89,21 @@
             v-for="(item,index) in scope.row.complete_paths"
             :key="index"
           >
-            <a
-              :href="item"
-              target="_blank"
-            >查看图片{{ index + 1 }}</a><br>
+            <el-tooltip
+              class="item"
+            >
+              <img
+                :src="item"
+                alt="查看大图"
+                style="width:60px;height:50px;padding-right:5px"
+              >
+              <div slot="content">
+                <img
+                  :src="item"
+                  style="width:100%;height:100%;padding:5px"
+                >
+              </div>
+            </el-tooltip>
           </span>
         </template>
       </el-table-column>
