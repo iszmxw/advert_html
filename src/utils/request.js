@@ -74,7 +74,8 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // for debug
     Message({
-      message: error.message,
+      // message: error.message,
+      message: '请求数据失败，请确认您的网络正常！',
       type: 'error',
       duration: 5 * 1000
     })
