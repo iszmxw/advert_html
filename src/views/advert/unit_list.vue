@@ -4,7 +4,6 @@
       :default-active="activeIndex"
       class="el-menu-demo"
       mode="horizontal"
-      @select="handleSelect"
     >
       <el-menu-item index="1">
         <router-link
@@ -49,6 +48,20 @@
         width="80"
       >
         <template slot-scope="scope">{{ scope.row.id }}</template>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="开关"
+        width="80"
+      >
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            :active-value="1"
+            :inactive-value="0"
+            @change="SwitchStatus(scope.row.id)"
+          />
+        </template>
       </el-table-column>
       <el-table-column
         v-if="checkPermission(['isadmin'])"
@@ -213,7 +226,7 @@
 </template>
 
 <script>
-import { unit_list, unit_delete, unit_edit, plan_list_data } from '@/api/advert'
+import { unit_list, unit_delete, unit_edit, plan_list_data, unit_status } from '@/api/advert'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -251,8 +264,16 @@ export default {
   },
   methods: {
     checkPermission,
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath)
+    SwitchStatus(id) {
+      unit_status({ id: id }).then(res => {
+        if (res.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.message
+          })
+          this.getList()
+        }
+      })
     },
     plan_list_data() {
       plan_list_data().then(res => {

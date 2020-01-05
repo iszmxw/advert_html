@@ -51,6 +51,20 @@
         <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
+        label="开关"
+        width="80"
+      >
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            :active-value="1"
+            :inactive-value="0"
+            @change="SwitchStatus(scope.row.id)"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column
         v-if="checkPermission(['isadmin'])"
         align="center"
         label="所属商户"
@@ -186,7 +200,7 @@
 </template>
 
 <script>
-import { get_plan_list, plan_edit, plan_delete } from '@/api/advert'
+import { get_plan_list, plan_edit, plan_delete, plan_status } from '@/api/advert'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -215,6 +229,17 @@ export default {
   },
   methods: {
     checkPermission,
+    SwitchStatus(id) {
+      plan_status({ id: id }).then(res => {
+        if (res.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.message
+          })
+          this.getList()
+        }
+      })
+    },
     handleClose() {
       this.dialogVisible = false
     },

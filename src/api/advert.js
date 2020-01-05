@@ -144,3 +144,30 @@ export function idea_check(data) {
   })
 }
 
+// 广告计划状态切换
+export function plan_status(data) {
+  return request({
+    url: '/advert/plan_status',
+    method: 'post',
+    data
+  })
+}
+
+// 广告单元状态切换
+export function unit_status(data) {
+  return request({
+    url: '/advert/unit_status',
+    method: 'post',
+    data
+  })
+}
+
+// 广告创意状态切换
+export function idea_status(data) {
+  return request({
+    url: '/advert/idea_status',
+    method: 'post',
+    data
+  })
+}
+
