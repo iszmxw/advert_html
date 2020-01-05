@@ -185,6 +185,37 @@ export const asyncRoutes = [{
   }
   ]
 },
+
+{
+  path: '/news',
+  component: Layout,
+  redirect: '/news/news_list',
+  name: 'Advert',
+  alwaysShow: true,
+  meta: {
+    title: '新闻管理',
+    icon: 'documentation',
+    roles: ['isadmin']
+  },
+  children: [{
+    path: 'news_list',
+    name: 'news_list',
+    component: () => import('@/views/news/news_list'),
+    meta: {
+      title: '新闻列表',
+      roles: ['isadmin']
+    }
+  }, {
+    path: 'news_detail',
+    name: 'news_detail',
+    component: () => import('@/views/news/news_detail'),
+    hidden: true,
+    meta: {
+      title: '新闻详情',
+      roles: ['isadmin']
+    }
+  }]
+},
 {
   path: 'external-link',
   component: Layout,
