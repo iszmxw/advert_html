@@ -17,3 +17,12 @@ export function news_detail(data) {
     data
   })
 }
+
+// 删除新闻
+export function news_delete(data) {
+  return request({
+    url: '/news/news_delete',
+    method: 'post',
+    data
+  })
+}
