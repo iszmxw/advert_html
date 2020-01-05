@@ -135,3 +135,12 @@ export function idea_edit(data) {
   })
 }
 
+// 广告审核
+export function idea_check(data) {
+  return request({
+    url: '/advert/idea_check',
+    method: 'post',
+    data
+  })
+}
+

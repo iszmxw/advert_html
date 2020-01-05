@@ -4,7 +4,6 @@
       :default-active="activeIndex"
       class="el-menu-demo"
       mode="horizontal"
-      @select="handleSelect"
     >
       <el-menu-item index="1">
         <router-link
@@ -95,7 +94,7 @@
       </el-table-column>
       <el-table-column
         align="header-center"
-        label="投放预算"
+        label="投放预算（元/天）"
       >
         <template slot-scope="scope">{{ scope.row.budget / 100 }} 元</template>
       </el-table-column>
@@ -106,6 +105,7 @@
         <template slot-scope="scope">{{ scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</template>
       </el-table-column>
       <el-table-column
+        v-if="checkPermission(['isaccount'])"
         align="center"
         label="操作"
         width="150"
@@ -117,12 +117,6 @@
             size="small"
             @click="handleEdit(scope.row)"
           >编辑</el-button>
-          <el-button
-            v-if="checkPermission(['isadmin'])"
-            type="primary"
-            size="small"
-            @click="handleCheck(scope.row)"
-          >审核</el-button>
           <el-button
             v-if="checkPermission(['isaccount'])"
             type="danger"
@@ -143,6 +137,9 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
       title="编辑广告计划"
     >
       <el-form
@@ -177,7 +174,7 @@
       <div style="text-align:right;">
         <el-button
           type="danger"
-          @click="dialogVisible=false"
+          @click="handleClose"
         >取消</el-button>
         <el-button
           type="primary"
@@ -218,8 +215,8 @@ export default {
   },
   methods: {
     checkPermission,
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath)
+    handleClose() {
+      this.dialogVisible = false
     },
     async getList() {
       const res = await get_plan_list(this.listQuery)
@@ -227,6 +224,7 @@ export default {
       this.total = res.data.total
     },
     handleEdit(data) {
+      this.plan.date = []
       this.plan.id = data.id
       this.plan.name = data.name
       this.plan.date[0] = data.start_time

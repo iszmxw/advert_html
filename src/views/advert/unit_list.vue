@@ -114,6 +114,7 @@
         <template slot-scope="scope">{{ scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</template>
       </el-table-column>
       <el-table-column
+        v-if="checkPermission(['isaccount'])"
         align="center"
         label="操作"
         width="150"
@@ -125,12 +126,6 @@
             size="small"
             @click="handleEdit(scope.row)"
           >编辑</el-button>
-          <el-button
-            v-if="checkPermission(['isadmin'])"
-            type="primary"
-            size="small"
-            @click="handleCheck(scope.row)"
-          >审核</el-button>
           <el-button
             v-if="checkPermission(['isaccount'])"
             type="danger"
@@ -151,6 +146,9 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
       title="编辑单元信息"
       width="30%"
     >

@@ -4,7 +4,6 @@
       :default-active="activeIndex"
       class="el-menu-demo"
       mode="horizontal"
-      @select="handleSelect"
     >
       <el-menu-item index="1">
         <router-link
@@ -59,8 +58,34 @@
         <template slot-scope="scope">{{ scope.row.account_name }}</template>
       </el-table-column>
       <el-table-column
+        label="审核状态"
+      >
+        <template slot-scope="scope">
+          <el-button
+            v-if="scope.row.is_check == 0"
+            type="warning"
+            plain
+            disabled
+          >待审核</el-button>
+          <el-button
+            v-if="scope.row.is_check == 1"
+            type="success"
+            plain
+            disabled
+          >已通过</el-button>
+          <el-button
+            v-if="scope.row.is_check == 2"
+            type="danger"
+            plain
+            disabled
+          >未通过</el-button>
+          <br>
+          <span v-if="scope.row.is_check == 2">原因：{{ scope.row.remark }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         align="header-center"
-        label="状态"
+        label="开启状态"
       >
         <template slot-scope="scope">
           <el-button
@@ -150,12 +175,18 @@
             size="small"
             @click="handleEdit(scope.row)"
           >编辑</el-button>
-          <el-button
-            v-if="checkPermission(['isadmin'])"
-            type="primary"
-            size="small"
-            @click="handleCheck(scope.row)"
-          >审核</el-button>
+          <div v-if="checkPermission(['isadmin'])">
+            <el-button
+              v-if="scope.row.is_check === 0"
+              type="primary"
+              size="small"
+              @click="handleCheckModal(scope.row)"
+            >审核</el-button>
+            <el-button
+              v-else
+              size="small"
+            >已处理</el-button>
+          </div>
           <el-button
             v-if="checkPermission(['isaccount'])"
             type="danger"
@@ -173,11 +204,63 @@
       :limit.sync="listQuery.limit"
       @pagination="getList"
     />
+
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
+      title="审核广告创意"
+      width="30%"
+    >
+      <el-form
+        :model="checkdata"
+        label-width="120px"
+        label-position="left"
+      >
+        <el-form-item label="审核广告创意">
+          <el-select
+            v-model="checkdata.is_check"
+            placeholder="请审核"
+          >
+            <el-option
+              label="待审核"
+              :value="0"
+            />
+            <el-option
+              label="审核通过"
+              :value="1"
+            />
+            <el-option
+              label="审核拒绝"
+              :value="2"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="checkdata.is_check === 2" label="拒绝原因">
+          <el-input
+            v-model="checkdata.remark"
+            placeholder="理由"
+          />
+        </el-form-item>
+      </el-form>
+      <div style="text-align:right;">
+        <el-button
+          type="danger"
+          @click="dialogVisible=false"
+        >取消</el-button>
+        <el-button
+          type="primary"
+          @click="handleCheck"
+        >确定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { idea_list, idea_delete } from '@/api/advert'
+import { idea_list, idea_delete, idea_check } from '@/api/advert'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -191,6 +274,12 @@ export default {
         page: 1,
         limit: 10
       },
+      checkdata: {
+        id: null,
+        is_check: 0,
+        remark: null
+      },
+      dialogVisible: false,
       ideaList: []
     }
   },
@@ -202,8 +291,30 @@ export default {
     handleEdit(data) {
       window.open(window.location.origin + '/#/advert/idea_edit?id=' + data.id)
     },
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath)
+    handleCheckModal(data) {
+      this.checkdata.id = data.id
+      this.checkdata.is_check = data.is_check
+      this.checkdata.remark = data.remark
+      this.dialogVisible = true
+    },
+    handleCheck() {
+      this.$confirm('确定要审核该广告创意吗?', '温馨提示', {
+        confirmButtonText: 'OK',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async() => {
+          const res = await idea_check(this.checkdata)
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: res.message
+            })
+            this.dialogVisible = false
+            this.getList()
+          }
+        })
+        .catch(err => { console.error(err) })
     },
     async getList() {
       const res = await idea_list(this.listQuery)
