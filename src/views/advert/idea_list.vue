@@ -309,8 +309,8 @@ export default {
             type: 'success',
             message: res.message
           })
-          this.getList()
         }
+        this.getList()
       })
     },
     handleEdit(data) {

@@ -18,7 +18,7 @@
         width="400"
       >
         <template slot-scope="scope">
-          <el-link type="primary" :href="'/#/news/news_detail?id=' + scope.row.id" target="_blank">{{ scope.row.title }}</el-link>
+          <el-link type="primary" :href="href+'/#/news/news_detail?id=' + scope.row.id" target="_blank">{{ scope.row.title }}</el-link>
         </template>
       </el-table-column>
       <el-table-column
@@ -84,6 +84,7 @@ export default {
   components: { Pagination },
   data() {
     return {
+      href: window.location.origin === 'http://localhost:9528' ? window.location.origin : window.location.origin + '/admin',
       total: 0,
       listQuery: {
         page: 1,

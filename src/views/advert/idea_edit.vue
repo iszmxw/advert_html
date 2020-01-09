@@ -198,7 +198,7 @@ export default {
       })
     },
     handleRemove(file, fileList) {
-      this.images = fileList
+      this.form.images = fileList
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
