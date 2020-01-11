@@ -282,6 +282,7 @@ export default {
   components: { Pagination },
   data() {
     return {
+      url: window.location.origin === 'http://localhost:9528' ? window.location.origin : window.location.origin + '/admin',
       activeIndex: '3',
       total: 0,
       listQuery: {
@@ -314,7 +315,7 @@ export default {
       })
     },
     handleEdit(data) {
-      window.open(window.location.origin + '/#/advert/idea_edit?id=' + data.id)
+      window.open(this.url + '/#/advert/idea_edit?id=' + data.id)
     },
     handleCheckModal(data) {
       this.checkdata.id = data.id
