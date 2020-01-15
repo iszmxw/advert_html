@@ -78,10 +78,10 @@ export default {
         this.__resizeHandler()
       }
     },
-    setOptions({ allConsume, showCount, clickCount, ctr, showConsume } = {}) {
+    setOptions({ day_consume, show_count, click_count, ctr, show_consume, date } = {}) {
       this.chart.setOption({
         xAxis: {
-          data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天'],
+          data: date,
           boundaryGap: false,
           axisTick: {
             show: false
@@ -122,7 +122,7 @@ export default {
               }
             }
           },
-          data: allConsume,
+          data: day_consume,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
         },
@@ -139,7 +139,7 @@ export default {
               }
             }
           },
-          data: showCount,
+          data: show_count,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         },
@@ -156,7 +156,7 @@ export default {
               }
             }
           },
-          data: clickCount,
+          data: click_count,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         },
@@ -190,7 +190,7 @@ export default {
               }
             }
           },
-          data: showConsume,
+          data: show_consume,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         }]
