@@ -78,7 +78,7 @@ export default {
         this.__resizeHandler()
       }
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({ allConsume, showCount, clickCount, ctr, showConsume } = {}) {
       this.chart.setOption({
         xAxis: {
           data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天'],
@@ -107,10 +107,13 @@ export default {
           }
         },
         legend: {
-          data: ['总消费', '点击数']
+          data: ['总消费', '展现数', '点击数', '点击率', '每千次展现消费']
         },
         series: [{
-          name: '总消费', itemStyle: {
+          name: '总消费',
+          smooth: true,
+          type: 'line',
+          itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -119,11 +122,26 @@ export default {
               }
             }
           },
-          smooth: true,
-          type: 'line',
-          data: expectedData,
+          data: allConsume,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
+        },
+        {
+          name: '展现数',
+          smooth: true,
+          type: 'line',
+          itemStyle: {
+            normal: {
+              color: '#f9b423',
+              lineStyle: {
+                color: '#f9b423',
+                width: 2
+              }
+            }
+          },
+          data: showCount,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
         },
         {
           name: '点击数',
@@ -135,13 +153,44 @@ export default {
               lineStyle: {
                 color: '#3888fa',
                 width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
               }
             }
           },
-          data: actualData,
+          data: clickCount,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        },
+        {
+          name: '点击率',
+          smooth: true,
+          type: 'line',
+          itemStyle: {
+            normal: {
+              color: '#6670bf',
+              lineStyle: {
+                color: '#6670bf',
+                width: 2
+              }
+            }
+          },
+          data: ctr,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        },
+        {
+          name: '每千次展现消费',
+          smooth: true,
+          type: 'line',
+          itemStyle: {
+            normal: {
+              color: '#42c195',
+              lineStyle: {
+                color: '#42c195',
+                width: 2
+              }
+            }
+          },
+          data: showConsume,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         }]
