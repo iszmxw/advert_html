@@ -12,7 +12,6 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('newVisitis')"
       >
         <div class="card-panel-icon-wrapper icon-green">
           <svg-icon
@@ -42,7 +41,6 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('messages')"
       >
         <div class="card-panel-icon-wrapper icon-blue">
           <svg-icon
@@ -72,7 +70,6 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('shoppings')"
       >
         <div class="card-panel-icon-wrapper icon-warning">
           <svg-icon
@@ -93,6 +90,7 @@
         </div>
       </div>
     </el-col>
+
     <el-col
       v-permission="['isadmin']"
       :xs="12"
@@ -102,7 +100,6 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('purchases')"
       >
         <div class="card-panel-icon-wrapper icon-red">
           <svg-icon
@@ -133,7 +130,6 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('newVisitis')"
       >
         <div class="card-panel-icon-wrapper icon-green">
           <svg-icon
@@ -164,7 +160,6 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('messages')"
       >
         <div class="card-panel-icon-wrapper icon-blue">
           <svg-icon
@@ -195,7 +190,6 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('purchases')"
       >
         <div class="card-panel-icon-wrapper icon-red">
           <svg-icon
@@ -226,7 +220,6 @@
     >
       <div
         class="card-panel"
-        @click="handleSetLineChartData('shoppings')"
       >
         <div class="card-panel-icon-wrapper icon-green">
           <svg-icon
@@ -278,9 +271,6 @@ export default {
     this.getData()
   },
   methods: {
-    handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
-    },
     getData() {
       dashboard().then(res => {
         if (res.code === 200) {
