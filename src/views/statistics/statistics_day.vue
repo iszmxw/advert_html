@@ -170,6 +170,9 @@ export default {
       // 调用 callback 返回建议列表的数据
       cb(results)
     },
+    handleSelect(item) {
+      console.log(item)
+    },
     // 初始化时间
     initTime() {
       const end = new Date()
