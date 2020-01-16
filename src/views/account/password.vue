@@ -77,7 +77,7 @@ export default {
             type: 'success'
           })
           this.$router.push({
-            path: '/account/info'
+            path: '/dashboard'
           })
         } else {
           this.$notify.error({
