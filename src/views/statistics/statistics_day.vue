@@ -2,6 +2,16 @@
   <div class="dashboard-editor-container">
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <div class="block">
+        <div class="sub-title">激活即列出输入建议</div>
+        <el-autocomplete
+          v-model="state1"
+          class="inline-input"
+          :fetch-suggestions="querySearch"
+          placeholder="请输入内容"
+          @select="handleSelect"
+        />
+      </div>
+      <div class="block">
         <span class="demonstration">时间</span>
         <el-date-picker
           v-model="listQuery.search_time"
