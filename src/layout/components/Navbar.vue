@@ -16,12 +16,11 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/iszmxw/advert_html">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://panjiachen.gitee.io/vue-element-admin-site/zh/">
-            <el-dropdown-item>文档</el-dropdown-item>
-          </a>
+          <router-link to="/account/info">
+            <el-dropdown-item>
+              账户中心
+            </el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">退出登录</span>
           </el-dropdown-item>

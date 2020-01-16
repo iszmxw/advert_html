@@ -72,6 +72,9 @@
           <el-tag v-if="account.type === 1" type="success">管理员</el-tag>
           <el-tag v-if="account.type === 2" type="danger">合作商户</el-tag>
         </el-form-item>
+        <el-form-item label="联系人姓名">
+          <el-input v-model="account.nickname" placeholder="联系人姓名" />
+        </el-form-item>
         <el-form-item label="手机号">
           <el-input v-model="account.mobile" placeholder="手机号" />
         </el-form-item>
@@ -95,7 +98,6 @@
 <script>
 import { getList, edit, lockStatus } from '@/api/user'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
 export default {
   components: { Pagination },
   data() {
@@ -111,6 +113,7 @@ export default {
         type: '',
         amount: '',
         account: '',
+        nickname: '',
         mobile: ''
       },
       accountList: [],
@@ -136,6 +139,7 @@ export default {
       this.account.type = data.type
       this.account.amount = data.amount / 100
       this.account.account = data.account
+      this.account.nickname = data.nickname
       this.account.mobile = data.mobile
       this.dialogVisible = true
     },

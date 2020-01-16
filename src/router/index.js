@@ -101,6 +101,15 @@ export const asyncRoutes = [{
       title: '账户信息',
       roles: ['isaccount']
     }
+  },
+  {
+    path: 'password',
+    name: 'Password',
+    component: () => import('@/views/account/password'),
+    meta: {
+      title: '修改密码',
+      roles: ['isadmin', 'isaccount']
+    }
   }
   ]
 },
@@ -244,9 +253,9 @@ export const asyncRoutes = [{
     roles: ['isadmin', 'isaccount']
   },
   children: [{
-    path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+    path: 'https://baidu.com/',
     meta: {
-      title: '外部链接',
+      title: '百度一下',
       icon: 'link',
       roles: ['isadmin', 'isaccount']
     }

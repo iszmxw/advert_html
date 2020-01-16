@@ -10,9 +10,7 @@
       :lg="6"
       class="card-panel-col"
     >
-      <div
-        class="card-panel"
-      >
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-green">
           <svg-icon
             icon-class="peoples"
@@ -39,9 +37,7 @@
       :lg="6"
       class="card-panel-col"
     >
-      <div
-        class="card-panel"
-      >
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-blue">
           <svg-icon
             icon-class="example"
@@ -68,9 +64,7 @@
       :lg="6"
       class="card-panel-col"
     >
-      <div
-        class="card-panel"
-      >
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-warning">
           <svg-icon
             icon-class="skill"
@@ -98,9 +92,7 @@
       :lg="6"
       class="card-panel-col"
     >
-      <div
-        class="card-panel"
-      >
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-red">
           <svg-icon
             icon-class="bug"
@@ -128,9 +120,7 @@
       :lg="6"
       class="card-panel-col"
     >
-      <div
-        class="card-panel"
-      >
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-green">
           <svg-icon
             icon-class="eye"
@@ -158,9 +148,7 @@
       :lg="6"
       class="card-panel-col"
     >
-      <div
-        class="card-panel"
-      >
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-blue">
           <svg-icon
             icon-class="education"
@@ -188,9 +176,7 @@
       :lg="6"
       class="card-panel-col"
     >
-      <div
-        class="card-panel"
-      >
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-red">
           <svg-icon
             icon-class="money"
@@ -203,6 +189,7 @@
           </div>
           <count-to
             :start-val="0"
+            :decimals="2"
             :end-val="data.spend"
             :duration="3200"
             class="card-panel-num"
@@ -218,9 +205,7 @@
       :lg="6"
       class="card-panel-col"
     >
-      <div
-        class="card-panel"
-      >
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-green">
           <svg-icon
             icon-class="chart"
@@ -233,6 +218,7 @@
           </div>
           <count-to
             :start-val="0"
+            :decimals="2"
             :end-val="data.click_avg"
             :duration="3600"
             class="card-panel-num"

@@ -44,10 +44,28 @@ export function getList(data) {
   })
 }
 
-// 编辑账号
+// 超级管理员编辑账户
 export function edit(data) {
   return request({
     url: '/account/edit',
+    method: 'post',
+    data
+  })
+}
+
+// 账户修改自己的信息
+export function edit_info(data) {
+  return request({
+    url: '/account/edit_info',
+    method: 'post',
+    data
+  })
+}
+
+// 修改账号密码
+export function password(data) {
+  return request({
+    url: '/account/password',
     method: 'post',
     data
   })
