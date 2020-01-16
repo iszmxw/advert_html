@@ -1,10 +1,10 @@
 <template>
   <div class="dashboard-editor-container">
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <div class="block">
-        <div class="sub-title">激活即列出输入建议</div>
+      <div v-if="checkPermission(['isadmin'])">
+        <div class="sub-title">选择账户</div>
         <el-autocomplete
-          v-model="state1"
+          v-model="listQuery.account_id"
           class="inline-input"
           :fetch-suggestions="querySearch"
           placeholder="请输入内容"
@@ -99,6 +99,7 @@
 import { parseTime } from '@/utils'
 import { statistics_day } from '@/api/statistics'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 import LineChart from './components/LineChart'
 
@@ -150,6 +151,7 @@ export default {
       lineChartData: lineChartData.day,
       total: 0,
       listQuery: {
+        account_id: '',
         page: 1,
         limit: 10,
         search_time: []
