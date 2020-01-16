@@ -2,15 +2,17 @@
   <div class="dashboard-editor-container">
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <div v-if="checkPermission(['isadmin'])">
-        <div class="sub-title">选择账户</div>
-        <el-autocomplete
-          v-model="listQuery.account_id"
-          class="inline-input"
-          :fetch-suggestions="querySearch"
-          placeholder="请输入内容"
-          @select="handleSelect"
-        />
+        <span class="demonstration">选择账户</span>
+        <el-select :value="listQuery.account_id" filterable clearable placeholder="请选择" @change="handleSelect">
+          <el-option
+            v-for="item in account_list"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </div>
+      <br>
       <div class="block">
         <span class="demonstration">时间</span>
         <el-date-picker
@@ -90,14 +92,16 @@
         :limit.sync="listQuery.limit"
         @pagination="getList"
       />
-
+      <br>
+      <br>
+      <br>
     </el-row>
   </div>
 </template>
 
 <script>
 import { parseTime } from '@/utils'
-import { statistics_day } from '@/api/statistics'
+import { statistics_day, account_list } from '@/api/statistics'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -121,6 +125,7 @@ export default {
   },
   data() {
     return {
+      account_list: [],
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -151,7 +156,7 @@ export default {
       lineChartData: lineChartData.day,
       total: 0,
       listQuery: {
-        account_id: '',
+        account_id: 1,
         page: 1,
         limit: 10,
         search_time: []
@@ -160,18 +165,21 @@ export default {
     }
   },
   created() {
+    this.getAccountList()
     this.initTime()
   },
   methods: {
     checkPermission,
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants
-      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
-      // 调用 callback 返回建议列表的数据
-      cb(results)
+    handleSelect(id) {
+      this.listQuery.account_id = id
+      this.getList()
     },
-    handleSelect(item) {
-      console.log(item)
+    getAccountList() {
+      account_list().then(res => {
+        if (res.code === 200) {
+          this.account_list = res.data
+        }
+      })
     },
     // 初始化时间
     initTime() {

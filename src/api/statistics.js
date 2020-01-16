@@ -8,3 +8,12 @@ export function statistics_day(data) {
     data
   })
 }
+
+// 账户列表
+export function account_list(data) {
+  return request({
+    url: '/statistics/account_list',
+    method: 'post',
+    data
+  })
+}
