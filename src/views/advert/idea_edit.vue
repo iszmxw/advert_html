@@ -140,7 +140,7 @@ export default {
         advert_name: '',
         images: []
       },
-      upload_url: 'http://advert.54zm.com/api/admin/advert/image_upload',
+      upload_url: window.location.origin === 'http://localhost:9528' ? window.location.origin : window.location.origin + '/api/admin/advert/image_upload',
       dialogImageUrl: '',
       dialogVisible: false
     }
