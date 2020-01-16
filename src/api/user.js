@@ -9,6 +9,15 @@ export function login(data) {
   })
 }
 
+// 登录日志
+export function login_log(data) {
+  return request({
+    url: '/login_log',
+    method: 'post',
+    data
+  })
+}
+
 // 获取用户信息
 export function getInfo(token) {
   return request({
