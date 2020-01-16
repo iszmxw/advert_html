@@ -163,6 +163,13 @@ export default {
     this.initTime()
   },
   methods: {
+    checkPermission,
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
     // 初始化时间
     initTime() {
       const end = new Date()
