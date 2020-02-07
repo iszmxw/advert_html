@@ -103,6 +103,15 @@ export const asyncRoutes = [{
     }
   },
   {
+    path: 'loginlog',
+    name: 'loginlog',
+    component: () => import('@/views/account/loginlog'),
+    meta: {
+      title: '登录记录',
+      roles: ['isadmin', 'isaccount']
+    }
+  },
+  {
     path: 'password',
     name: 'Password',
     component: () => import('@/views/account/password'),
