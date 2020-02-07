@@ -134,7 +134,7 @@
           <count-to
             :start-val="0"
             :decimals="2"
-            :end-val="data.spend"
+            :end-val="data.amount"
             :duration="3200"
             class="card-panel-num"
           />
