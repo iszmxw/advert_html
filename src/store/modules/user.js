@@ -47,6 +47,10 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
+      var searchURL = window.location.search
+      var user_id = searchURL.split('&')[0].split('=')[1]
+      console.log(user_id)
+      console.log(state.token)
       getInfo(state.token).then(response => {
         const { data } = response
 
