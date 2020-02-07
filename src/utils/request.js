@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { getToken, getUserId } from '@/utils/auth'
 
 // 创建一个axios实例
 const service = axios.create({
@@ -20,6 +20,7 @@ service.interceptors.request.use(
       // ['Admin-Token'] 是自定义标题键
       // 请根据实际情况进行修改
       config.headers['Admin-Token'] = getToken()
+      config.headers['User-Id'] = getUserId()
     }
     return config
   },

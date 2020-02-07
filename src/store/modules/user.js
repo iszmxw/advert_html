@@ -1,9 +1,10 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken, setUserId, removeUserId } from '@/utils/auth'
+import { getToken, setToken, removeToken, getUserId, setUserId, removeUserId } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
+  user_id: getUserId(),
   name: '',
   avatar: '',
   introduction: '',
@@ -13,6 +14,9 @@ const state = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  SET_USER_ID: (state, user_id) => {
+    state.user_id = user_id
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
@@ -40,7 +44,12 @@ const actions = {
         var searchURL = window.location.search
         searchURL = searchURL.substring(1, searchURL.length)
         var user_id = searchURL.split('&')[0].split('=')[1]
-        setUserId(user_id)
+        if (user_id !== undefined) {
+          commit('SET_USER_ID', user_id)
+          setUserId(user_id)
+        } else {
+          removeUserId()
+        }
         resolve()
       }).catch(error => {
         reject(error)
@@ -50,20 +59,28 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
+    var searchURL = window.location.search
+    searchURL = searchURL.substring(1, searchURL.length)
+    var user_id = searchURL.split('&')[0].split('=')[1]
+    if (user_id !== undefined) {
+      commit('SET_USER_ID', user_id)
+      setUserId(user_id)
+    } else {
+      removeUserId()
+    }
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
 
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请重新登录。')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { info, roles, name, avatar, introduction } = data
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
-
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
@@ -80,6 +97,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
+        commit('SET_USER_ID', '')
         commit('SET_ROLES', [])
         removeToken()
         removeUserId()
@@ -95,6 +113,7 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
+      commit('SET_USER_ID', '')
       commit('SET_ROLES', [])
       removeToken()
       removeUserId()
@@ -112,7 +131,12 @@ const actions = {
       var searchURL = window.location.search
       searchURL = searchURL.substring(1, searchURL.length)
       var user_id = searchURL.split('&')[0].split('=')[1]
-      setUserId(user_id)
+      if (user_id !== undefined) {
+        commit('SET_USER_ID', user_id)
+        setUserId(user_id)
+      } else {
+        removeUserId()
+      }
 
       const { roles } = await dispatch('getInfo')
 
