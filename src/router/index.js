@@ -234,27 +234,27 @@ export const asyncRoutes = [{
     }
   }]
 },
-{
-  path: '/statistics',
-  component: Layout,
-  redirect: '/statistics/statistics_day',
-  name: 'Statistics',
-  alwaysShow: true,
-  meta: {
-    title: '数据统计',
-    icon: 'chart',
-    roles: ['isadmin', 'isaccount']
-  },
-  children: [{
-    path: 'statistics_day',
-    name: 'statistics_day',
-    component: () => import('@/views/statistics/statistics_day'),
-    meta: {
-      title: '分日数据',
-      roles: ['isadmin', 'isaccount']
-    }
-  }]
-},
+// {
+//   path: '/statistics',
+//   component: Layout,
+//   redirect: '/statistics/statistics_day',
+//   name: 'Statistics',
+//   alwaysShow: true,
+//   meta: {
+//     title: '数据统计',
+//     icon: 'chart',
+//     roles: ['isadmin', 'isaccount']
+//   },
+//   children: [{
+//     path: 'statistics_day',
+//     name: 'statistics_day',
+//     component: () => import('@/views/statistics/statistics_day'),
+//     meta: {
+//       title: '分日数据',
+//       roles: ['isadmin', 'isaccount']
+//     }
+//   }]
+// },
 {
   path: 'external-link',
   component: Layout,
