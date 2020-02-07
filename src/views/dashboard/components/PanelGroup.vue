@@ -121,6 +121,35 @@
       class="card-panel-col"
     >
       <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-red">
+          <svg-icon
+            icon-class="money"
+            class-name="card-panel-icon"
+          />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            账户余额（元）
+          </div>
+          <count-to
+            :start-val="0"
+            :decimals="2"
+            :end-val="data.spend"
+            :duration="3200"
+            class="card-panel-num"
+          />
+        </div>
+      </div>
+    </el-col>
+
+    <el-col
+      v-permission="['isaccount']"
+      :xs="12"
+      :sm="12"
+      :lg="6"
+      class="card-panel-col"
+    >
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-green">
           <svg-icon
             icon-class="eye"
