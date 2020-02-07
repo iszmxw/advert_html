@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setUserId, removeUserId } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
@@ -37,6 +37,10 @@ const actions = {
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
+        var searchURL = window.location.search
+        searchURL = searchURL.substring(1, searchURL.length)
+        var user_id = searchURL.split('&')[0].split('=')[1]
+        setUserId(user_id)
         resolve()
       }).catch(error => {
         reject(error)
@@ -47,10 +51,6 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      var searchURL = window.location.search
-      var user_id = searchURL.split('&')[0].split('=')[1]
-      console.log(user_id)
-      console.log(state.token)
       getInfo(state.token).then(response => {
         const { data } = response
 
@@ -82,6 +82,7 @@ const actions = {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
+        removeUserId()
         resetRouter()
         resolve()
       }).catch(error => {
@@ -96,6 +97,7 @@ const actions = {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       removeToken()
+      removeUserId()
       resolve()
     })
   },
@@ -107,6 +109,10 @@ const actions = {
 
       commit('SET_TOKEN', token)
       setToken(token)
+      var searchURL = window.location.search
+      searchURL = searchURL.substring(1, searchURL.length)
+      var user_id = searchURL.split('&')[0].split('=')[1]
+      setUserId(user_id)
 
       const { roles } = await dispatch('getInfo')
 
