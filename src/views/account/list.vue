@@ -32,7 +32,7 @@
       <el-table-column align="header-center" label="注册时间">
         <template slot-scope="scope">{{ scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="150">
+      <el-table-column align="center" label="操作" width="250">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -51,6 +51,13 @@
             size="small"
             @click="handleLock(scope)"
           >解冻</el-button>
+          <el-link type="primary" :href="href+'/index.html?user_id=' + scope.row.id" target="_blank">
+            <el-button
+              type="success"
+              size="small"
+            >模拟登录</el-button>
+          </el-link>
+
         </template>
       </el-table-column>
     </el-table>
@@ -102,6 +109,7 @@ export default {
   components: { Pagination },
   data() {
     return {
+      href: window.location.origin === 'http://localhost:9528' ? window.location.origin : window.location.origin + '/admin',
       total: 0,
       listQuery: {
         page: 1,
