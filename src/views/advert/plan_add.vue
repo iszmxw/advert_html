@@ -42,14 +42,24 @@
           </el-col>
         </el-col>
 
-        <el-col :lg="24">
-          <el-col :lg="12">
+        <el-row :gutter="10">
+          <el-col :span="3">
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">立即创建</el-button>
+              <el-button type="primary" @click="onSubmit">保存并关闭</el-button>
             </el-form-item>
           </el-col>
-        </el-col>
-      </el-form>
+          <el-col :span="3">
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit">保存并创建单元</el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <el-button type="primary" @click="goBack">取消</el-button>
+            </el-form-item>
+          </el-col>
+          </el-col>
+        </el-row></el-form>
     </div>
   </div>
 </template>
@@ -68,6 +78,9 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.$router.back(-1)
+    },
     onSubmit() {
       plan_add(this.form).then(res => {
         if (res.code === 200) {
