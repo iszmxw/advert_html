@@ -76,7 +76,7 @@ const actions = {
           reject('验证失败，请重新登录。')
         }
 
-        const { info, roles, name, avatar, introduction } = data
+        const { roles, name, avatar, introduction } = data
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
