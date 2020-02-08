@@ -42,7 +42,7 @@
           </el-col>
         </el-col>
 
-        <el-row :gutter="10">
+        <el-col :gutter="10">
           <el-col :span="3">
             <el-form-item>
               <el-button type="primary" @click="onSubmit">保存并关闭</el-button>
@@ -50,16 +50,16 @@
           </el-col>
           <el-col :span="3">
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">保存并创建单元</el-button>
+              <el-button type="primary" @click="onSubmit('next')">保存并创建单元</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="3">
             <el-form-item>
-              <el-button type="primary" @click="goBack">取消</el-button>
+              <el-button @click="goBack">取消</el-button>
             </el-form-item>
           </el-col>
-          </el-col>
-        </el-row></el-form>
+        </el-col>
+      </el-form>
     </div>
   </div>
 </template>
@@ -81,7 +81,7 @@ export default {
     goBack() {
       this.$router.back(-1)
     },
-    onSubmit() {
+    onSubmit(obj) {
       plan_add(this.form).then(res => {
         if (res.code === 200) {
           this.$notify({
@@ -89,9 +89,15 @@ export default {
             message: res.message,
             type: 'success'
           })
-          this.$router.push({
-            path: '/advert/plan_list'
-          })
+          if (obj === 'next') {
+            this.$router.push({
+              path: '/advert/unit_add'
+            })
+          } else {
+            this.$router.push({
+              path: '/advert/plan_list'
+            })
+          }
         } else {
           this.$notify.error({
             title: '错误',

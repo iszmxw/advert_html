@@ -66,13 +66,24 @@
           </el-col>
         </el-col>
 
-        <el-col :lg="24">
-          <el-col :lg="12">
+        <el-col :gutter="10">
+          <el-col :span="3">
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">立即创建</el-button>
+              <el-button type="primary" @click="onSubmit">保存并关闭</el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit('next')">保存并创建创意</el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <el-button @click="goBack">取消</el-button>
             </el-form-item>
           </el-col>
         </el-col>
+
       </el-form>
     </div>
   </div>
@@ -104,6 +115,9 @@ export default {
     this.plan_list_data()
   },
   methods: {
+    goBack() {
+      this.$router.back(-1)
+    },
     plan_list_data() {
       plan_list_data().then(res => {
         if (res.code === 200) {
@@ -111,7 +125,7 @@ export default {
         }
       })
     },
-    onSubmit() {
+    onSubmit(obj) {
       unit_add(this.form).then(res => {
         if (res.code === 200) {
           this.$notify({
@@ -119,9 +133,15 @@ export default {
             message: res.message,
             type: 'success'
           })
-          this.$router.push({
-            path: '/advert/unit_list'
-          })
+          if (obj === 'next') {
+            this.$router.push({
+              path: '/advert/idea_add'
+            })
+          } else {
+            this.$router.push({
+              path: '/advert/unit_list'
+            })
+          }
         } else {
           this.$notify.error({
             title: '错误',
