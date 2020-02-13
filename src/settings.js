@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '小窝广告管理系统',
+  title: '热讯头条广告投放平台',
 
   /**
    * @type {boolean} true | false

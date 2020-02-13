@@ -1,7 +1,7 @@
 {
   "name": "vue-admin-template",
   "version": "4.2.1",
-  "description": "小窝广告管理系统",
+  "description": "热讯头条广告投放平台",
   "author": "Pan <panfree23@gmail.com>",
   "license": "MIT",
   "scripts": {
