@@ -255,21 +255,21 @@ export const asyncRoutes = [{
 //     }
 //   }]
 // },
-{
-  path: 'external-link',
-  component: Layout,
-  meta: {
-    roles: ['isadmin', 'isaccount']
-  },
-  children: [{
-    path: 'https://baidu.com/',
-    meta: {
-      title: '百度一下',
-      icon: 'link',
-      roles: ['isadmin', 'isaccount']
-    }
-  }]
-},
+// {
+//   path: 'external-link',
+//   component: Layout,
+//   meta: {
+//     roles: ['isadmin', 'isaccount']
+//   },
+//   children: [{
+//     path: 'https://baidu.com/',
+//     meta: {
+//       title: '百度一下',
+//       icon: 'link',
+//       roles: ['isadmin', 'isaccount']
+//     }
+//   }]
+// },
 
 // 404页必须放在最后！
 {
