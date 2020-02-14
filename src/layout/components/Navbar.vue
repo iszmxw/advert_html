@@ -8,6 +8,7 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img :src="headImg" class="user-avatar">
+          <span class="user-name">{{ accountInfo.name }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -31,6 +32,7 @@
 </template>
 
 <script>
+import { getAccountInfo } from '@/api/user'
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
@@ -43,13 +45,15 @@ export default {
   },
   data() {
     return {
-      headImg: images1
+      headImg: images1,
+      accountInfo: {}
     }
   },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'roles'
     ])
   },
   methods: {
@@ -59,6 +63,19 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    getDataAccountInfo() {
+      getAccountInfo().then(res => {
+        if (res.code === 200) {
+          console.log(res)
+          this.accountInfo = res.data
+        }
+      })
+    }
+  },
+  created() {
+    if (this.roles[0] !== 'isadmin') {
+      this.getDataAccountInfo();
     }
   }
 }
@@ -120,14 +137,19 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
+        display: flex;
+        align-items: center;
         position: relative;
+        cursor: pointer;
 
         .user-avatar {
-          cursor: pointer;
           width: 40px;
           height: 40px;
           border-radius: 10px;
+        }
+
+        .user-name {
+          margin: 0 4px;
         }
 
         .el-icon-caret-bottom {
