@@ -9,8 +9,8 @@
       </div>
       <div class="bullshit">
         <div class="bullshit__oops">糟糕 !</div>
-        <div class="bullshit__info">保留所有权利
-          <a style="color:#20a0ff" href="http://blog.54zm.com" target="_blank">追梦小窝</a>
+        <div class="bullshit__info">热讯头条 保留所有权利
+          <!-- <a style="color:#20a0ff" href="http://blog.54zm.com" target="_blank">追梦小窝</a> -->
         </div>
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">请检查您输入的URL是否正确，或单击下面的按钮返回首页。</div>
