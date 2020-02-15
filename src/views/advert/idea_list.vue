@@ -132,7 +132,8 @@
       >
         <template slot-scope="scope">{{ scope.row.idea_name }}</template>
       </el-table-column>
-      <el-table-column
+
+      <!-- <el-table-column
         align="header-center"
         label="链接地址"
       >
@@ -143,32 +144,37 @@
         label="广告创意标题"
       >
         <template slot-scope="scope">{{ scope.row.advert_name }}</template>
-      </el-table-column>
+      </el-table-column> -->
+      
       <el-table-column
         align="header-center"
-        label="广告图片"
+        label="广告预览"
       >
         <template slot-scope="scope">
-          <span
-            v-for="(item,index) in scope.row.complete_paths"
-            :key="index"
-          >
-            <el-tooltip
-              class="item"
+          <div class="ad-preview">
+            <span>{{ scope.row.advert_name }}</span>
+            <span
+              v-for="(item,index) in scope.row.complete_paths"
+              :key="index"
             >
-              <img
-                :src="item"
-                alt="查看大图"
-                style="width:60px;height:50px;padding-right:5px"
+              <el-tooltip
+                class="item"
               >
-              <div slot="content">
                 <img
                   :src="item"
-                  style="width:100%;height:100%;padding:5px"
+                  alt="查看大图"
+                  style="width:60px;height:50px;padding-right:5px"
                 >
-              </div>
-            </el-tooltip>
-          </span>
+                <div slot="content">
+                  <img
+                    :src="item"
+                    style="width:100%;height:100%;padding:5px"
+                  >
+                </div>
+              </el-tooltip>
+            </span>
+            <a :href="scope.row.link" target="_blank">预览广告内容</a>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -376,6 +382,15 @@ export default {
   }
   .permission-tree {
     margin-bottom: 30px;
+  }
+
+  .ad-preview {
+    display: flex;
+    flex-flow: column;
+
+    & > a {
+      color: #0098ac;
+    }
   }
 }
 </style>
