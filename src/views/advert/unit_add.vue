@@ -122,6 +122,9 @@ export default {
       plan_list_data().then(res => {
         if (res.code === 200) {
           this.plan_options = res.data
+          if (res.data.length && this.$route.query.from) {
+            this.form.plan_id = res.data[res.data.length - 1].value
+          }
         }
       })
     },
@@ -135,7 +138,10 @@ export default {
           })
           if (obj === 'next') {
             this.$router.push({
-              path: '/advert/idea_add'
+              path: '/advert/idea_add',
+              query: {
+                plan_id: this.form.plan_id
+              }
             })
           } else {
             this.$router.push({

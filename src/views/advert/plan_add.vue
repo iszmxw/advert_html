@@ -13,7 +13,7 @@
         <el-col :lg="24">
           <el-col :lg="12">
             <el-form-item label="* 广告计划名称">
-              <el-input v-model="form.name" placeholder="请输入商户的账号，用来登录系统" />
+              <el-input v-model="form.name" placeholder="计划名称" />
             </el-form-item>
           </el-col>
         </el-col>
@@ -91,7 +91,10 @@ export default {
           })
           if (obj === 'next') {
             this.$router.push({
-              path: '/advert/unit_add'
+              path: '/advert/unit_add',
+              query: {
+                from: 'plan_add'
+              }
             })
           } else {
             this.$router.push({

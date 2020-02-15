@@ -132,7 +132,7 @@ export default {
       plan_options: [],
       unit_options: [],
       form: {
-        plan_id: '',
+        plan_id: this.$route.query.plan_id || '',
         unit_id: '',
         idea_name: '',
         link: '',
@@ -146,6 +146,7 @@ export default {
   },
   created() {
     this.plan_list_data()
+    this.unit_list_data(this.$route.query.plan_id)
   },
   methods: {
     plan_list_data() {
@@ -155,11 +156,13 @@ export default {
         }
       })
     },
-    unit_list_data(plan_id) {
+    unit_list_data(plan_id) {      
       unit_list_data({ plan_id: plan_id }).then(res => {
         if (res.code === 200) {
-          this.form.unit_id = ''
           this.unit_options = res.data
+          if (res.data.length && this.$route.query.plan_id) {
+            this.form.unit_id = res.data[res.data.length - 1].value
+          }
         }
       })
     },
