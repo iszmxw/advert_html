@@ -38,6 +38,31 @@
       <el-button type="primary">新增创意</el-button>
     </router-link>
 
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <span>
+        <span class="demonstration">选择账户</span>
+        <el-select :value="listQuery.account_id" filterable clearable placeholder="请选择" @change="handleSelect">
+          <el-option
+            v-for="item in account_list"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </span>
+      <span>
+        <span class="demonstration">审核状态</span>
+        <el-select v-model="listQuery.idea_status" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in ideaStatusList"
+            :key="index"
+            :label="item"
+            :value="index"
+          />
+        </el-select>
+      </span>
+    </el-row>
+
     <el-table
       :data="ideaList"
       style="width: 100%;margin-top:30px;"
@@ -281,6 +306,7 @@
 
 <script>
 import { idea_list, idea_delete, idea_check, idea_status } from '@/api/advert'
+import { account_list } from '@/api/statistics'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -292,6 +318,8 @@ export default {
       activeIndex: '3',
       total: 0,
       listQuery: {
+        account_id: 1,
+        idea_status: 0,
         page: 1,
         limit: 10
       },
@@ -301,14 +329,28 @@ export default {
         remark: null
       },
       dialogVisible: false,
-      ideaList: []
+      ideaList: [],
+      account_list: [],
+      ideaStatusList: ['全部', '待审核', '未通过', '已通过']
     }
   },
   created() {
+    this.getAccountList()
     this.getList()
   },
   methods: {
     checkPermission,
+    handleSelect(id) {
+      this.listQuery.account_id = id
+      this.getList()
+    },
+    getAccountList() {
+      account_list().then(res => {
+        if (res.code === 200) {
+          this.account_list = res.data
+        }
+      })
+    },
     SwitchStatus(id) {
       idea_status({ id: id }).then(res => {
         if (res.code === 200) {
