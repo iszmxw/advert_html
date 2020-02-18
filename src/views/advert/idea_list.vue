@@ -170,7 +170,7 @@
       >
         <template slot-scope="scope">{{ scope.row.advert_name }}</template>
       </el-table-column> -->
-      
+
       <el-table-column
         align="header-center"
         label="广告预览"

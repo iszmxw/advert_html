@@ -5,11 +5,11 @@
   >
     <el-col
       v-permission="['isadmin']"
-      @click.native="toPage('account/list')"
       :xs="12"
       :sm="12"
       :lg="6"
       class="card-panel-col"
+      @click.native="toPage('account/list')"
     >
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-green">
@@ -33,11 +33,11 @@
     </el-col>
     <el-col
       v-permission="['isadmin']"
-      @click.native="toPage('/advert/idea_list')"
       :xs="12"
       :sm="12"
       :lg="6"
       class="card-panel-col"
+      @click.native="toPage('/advert/idea_list')"
     >
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-blue">
@@ -61,11 +61,11 @@
     </el-col>
     <el-col
       v-permission="['isadmin']"
-      @click.native="toPage('/advert/idea_list')"
       :xs="12"
       :sm="12"
       :lg="6"
       class="card-panel-col"
+      @click.native="toPage('/advert/idea_list')"
     >
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-warning">
@@ -90,11 +90,11 @@
 
     <el-col
       v-permission="['isadmin']"
-      @click.native="toPage('/advert/idea_list')"
+      class="card-panel-col"
       :xs="12"
       :sm="12"
       :lg="6"
-      class="card-panel-col"
+      @click.native="toPage('/advert/idea_list')"
     >
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-red">
