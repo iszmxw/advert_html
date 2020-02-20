@@ -39,9 +39,15 @@
     </router-link>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <span>
+      <span v-if="checkPermission(['isadmin'])">
         <span class="demonstration">选择账户</span>
-        <el-select :value="listQuery.account_id" filterable clearable placeholder="请选择" @change="handleSelect">
+        <el-select
+          :value="listQuery.account_id"
+          filterable
+          clearable
+          placeholder="请选择"
+          @change="handleSelectAccount"
+        >
           <el-option
             v-for="item in account_list"
             :key="item.value"
@@ -52,14 +58,25 @@
       </span>
       <span>
         <span class="demonstration">审核状态</span>
-        <el-select v-model="listQuery.idea_status" placeholder="请选择">
+        <el-select
+          v-model="listQuery.is_check"
+          placeholder="请选择"
+          @change="handleSelectStatus"
+        >
           <el-option
             v-for="(item, index) in ideaStatusList"
             :key="index"
-            :label="item"
-            :value="index"
+            :label="item.name"
+            :value="item.status"
           />
         </el-select>
+      </span>
+      <span>
+        <el-button
+          type="primary"
+          size="small"
+          @click="getList()"
+        >筛选</el-button>
       </span>
     </el-row>
 
@@ -96,9 +113,7 @@
       >
         <template slot-scope="scope">{{ scope.row.account_name }}</template>
       </el-table-column>
-      <el-table-column
-        label="审核状态"
-      >
+      <el-table-column label="审核状态">
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.is_check == 0"
@@ -182,9 +197,7 @@
               v-for="(item,index) in scope.row.complete_paths"
               :key="index"
             >
-              <el-tooltip
-                class="item"
-              >
+              <el-tooltip class="item">
                 <img
                   :src="item"
                   alt="查看大图"
@@ -198,7 +211,10 @@
                 </div>
               </el-tooltip>
             </span>
-            <a :href="scope.row.link" target="_blank">预览广告内容</a>
+            <a
+              :href="scope.row.link"
+              target="_blank"
+            >预览广告内容</a>
           </div>
         </template>
       </el-table-column>
@@ -282,7 +298,10 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item v-if="checkdata.is_check === 2" label="拒绝原因">
+        <el-form-item
+          v-if="checkdata.is_check === 2"
+          label="拒绝原因"
+        >
           <el-input
             v-model="checkdata.remark"
             placeholder="理由"
@@ -318,8 +337,8 @@ export default {
       activeIndex: '3',
       total: 0,
       listQuery: {
-        account_id: 1,
-        idea_status: 0,
+        account_id: null,
+        is_check: -1,
         page: 1,
         limit: 10
       },
@@ -331,7 +350,19 @@ export default {
       dialogVisible: false,
       ideaList: [],
       account_list: [],
-      ideaStatusList: ['全部', '待审核', '未通过', '已通过']
+      ideaStatusList: [{
+        status: -1,
+        name: '全部'
+      }, {
+        status: 0,
+        name: '待审核'
+      }, {
+        status: 1,
+        name: '已通过'
+      }, {
+        status: 2,
+        name: '未通过'
+      }]
     }
   },
   created() {
@@ -340,9 +371,11 @@ export default {
   },
   methods: {
     checkPermission,
-    handleSelect(id) {
+    handleSelectAccount(id) {
       this.listQuery.account_id = id
-      this.getList()
+    },
+    handleSelectStatus(is_check) {
+      this.listQuery.is_check = is_check
     },
     getAccountList() {
       account_list().then(res => {

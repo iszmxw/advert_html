@@ -163,7 +163,7 @@ export default {
       lineChartData: lineChartData.day,
       total: 0,
       listQuery: {
-        account_id: 1,
+        account_id: null,
         page: 1,
         limit: 10,
         search_time: []
