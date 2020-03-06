@@ -61,7 +61,7 @@
     </el-col>
     <el-col
       v-permission="['isadmin']"
-      @click.native="toPage('/advert/idea_list', { status: 1 })"
+      @click.native="toPage('/advert/idea_list', { status: 0 })"
       :xs="12"
       :sm="12"
       :lg="6"

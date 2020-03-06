@@ -338,7 +338,7 @@ export default {
       total: 0,
       listQuery: {
         account_id: null,
-        is_check: -1,
+        is_check: 0,
         page: 1,
         limit: 10
       },
@@ -366,7 +366,7 @@ export default {
     }
   },
   created() {
-    this.listQuery.idea_status = this.$route.query.status ? this.$route.query.status : 0
+    this.listQuery.is_check = this.$route.query.status !== undefined ? this.$route.query.status : -1
     this.getAccountList()
     this.getList()
   },
