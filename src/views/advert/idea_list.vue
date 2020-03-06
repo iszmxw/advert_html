@@ -335,6 +335,7 @@ export default {
     }
   },
   created() {
+    this.listQuery.idea_status = this.$route.query.status ? this.$route.query.status : 0
     this.getAccountList()
     this.getList()
   },

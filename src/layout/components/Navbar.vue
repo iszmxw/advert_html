@@ -17,7 +17,7 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <router-link to="/account/info">
+          <router-link to="/account/list">
             <el-dropdown-item>
               账户中心
             </el-dropdown-item>

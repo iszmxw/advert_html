@@ -61,7 +61,7 @@
     </el-col>
     <el-col
       v-permission="['isadmin']"
-      @click.native="toPage('/advert/idea_list')"
+      @click.native="toPage('/advert/idea_list', { status: 1 })"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -90,7 +90,7 @@
 
     <el-col
       v-permission="['isadmin']"
-      @click.native="toPage('/advert/idea_list')"
+      @click.native="toPage('/advert/idea_list', { status: 2 })"
       :xs="12"
       :sm="12"
       :lg="6"
@@ -299,7 +299,7 @@ export default {
     },
     // path 跳转路径 params 参数
     toPage(path = '/', params = {}) {
-      this.$router.push({ path: path })
+      this.$router.push({ path: path, query: params })
     }
   }
 }
