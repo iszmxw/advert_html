@@ -56,6 +56,11 @@ export default {
       'roles'
     ])
   },
+  created() {
+    if (this.roles[0] !== 'isadmin') {
+      this.getDataAccountInfo()
+    }
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -71,11 +76,6 @@ export default {
           this.accountInfo = res.data
         }
       })
-    }
-  },
-  created() {
-    if (this.roles[0] !== 'isadmin') {
-      this.getDataAccountInfo();
     }
   }
 }

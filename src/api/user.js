@@ -89,6 +89,15 @@ export function lockStatus(data) {
   })
 }
 
+// 账号脚本状态修改
+export function scriptStatus(data) {
+  return request({
+    url: '/account/script_status',
+    method: 'post',
+    data
+  })
+}
+
 // 系统首页
 export function dashboard(data) {
   return request({

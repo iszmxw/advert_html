@@ -60,6 +60,20 @@
 
         </template>
       </el-table-column>
+      <el-table-column
+        align="center"
+        label="自动脚本开关"
+        width="80"
+      >
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.script_status"
+            :active-value="1"
+            :inactive-value="0"
+            @change="SwitchStatus(scope.row.id)"
+          />
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -103,7 +117,7 @@
 </template>
 
 <script>
-import { getList, edit, lockStatus } from '@/api/user'
+import { getList, edit, lockStatus, scriptStatus } from '@/api/user'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
   components: { Pagination },
@@ -136,6 +150,17 @@ export default {
     this.getList()
   },
   methods: {
+    SwitchStatus(id) {
+      scriptStatus({ id: id }).then(res => {
+        if (res.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.message
+          })
+          this.getList()
+        }
+      })
+    },
     async getList() {
       const res = await getList(this.listQuery)
       this.accountList = res.data.data

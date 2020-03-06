@@ -156,7 +156,7 @@ export default {
         }
       })
     },
-    unit_list_data(plan_id) {      
+    unit_list_data(plan_id) {
       unit_list_data({ plan_id: plan_id }).then(res => {
         if (res.code === 200) {
           this.unit_options = res.data
