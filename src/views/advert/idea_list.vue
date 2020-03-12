@@ -42,11 +42,11 @@
       <span v-if="checkPermission(['isadmin'])">
         <span class="demonstration">选择账户</span>
         <el-select
-          :value="listQuery.account_id"
+          v-model="listQuery.account_id"
           filterable
           clearable
           placeholder="请选择"
-          @change="handleSelectAccount"
+          @change="plan_list_data"
         >
           <el-option
             v-for="item in account_list"
@@ -61,7 +61,6 @@
         <el-select
           v-model="listQuery.is_check"
           placeholder="请选择"
-          @change="handleSelectStatus"
         >
           <el-option
             v-for="(item, index) in ideaStatusList"
@@ -70,6 +69,49 @@
             :value="item.status"
           />
         </el-select>
+      </span>
+      <span v-if="listQuery.account_id > 1">
+        <span>所属计划</span>
+        <el-select
+          v-model="listQuery.plan_id"
+          filterable
+          clearable
+          placeholder="请选择"
+          @change="unit_list_data"
+        >
+          <el-option
+            v-for="(item, index) in plan_options"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </span>
+      <span v-if="listQuery.account_id > 1 && listQuery.plan_id > 0">
+        <span>所属单元</span>
+        <el-select
+          v-model="listQuery.unit_id"
+          filterable
+          clearable
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in unit_options"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </span>
+      <span>
+        <span>创意名称</span>
+        <span style="display: inline-block">
+          <el-input
+            v-model="listQuery.idea_name"
+            clearable
+            placeholder="创意名称"
+          />
+        </span>
       </span>
       <span>
         <el-button
@@ -324,7 +366,7 @@
 </template>
 
 <script>
-import { idea_list, idea_delete, idea_check, idea_status } from '@/api/advert'
+import { idea_list, idea_delete, idea_check, idea_status, plan_list_data, unit_list_data } from '@/api/advert'
 import { account_list } from '@/api/statistics'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
 import checkPermission from '@/utils/permission' // 权限判断函数
@@ -338,10 +380,15 @@ export default {
       total: 0,
       listQuery: {
         account_id: null,
+        plan_id: null,
+        unit_id: null,
+        idea_name: null,
         is_check: 0,
         page: 1,
         limit: 10
       },
+      plan_options: [],
+      unit_options: [],
       checkdata: {
         id: null,
         is_check: 0,
@@ -367,16 +414,29 @@ export default {
   },
   created() {
     this.listQuery.is_check = this.$route.query.status !== undefined ? this.$route.query.status : -1
+    this.listQuery.account_id = this.$route.query.account_id !== undefined ? this.$route.query.account_id : null
+    this.listQuery.plan_id = this.$route.query.plan_id !== undefined ? this.$route.query.plan_id : null
+    this.listQuery.unit_id = this.$route.query.unit_id !== undefined ? this.$route.query.unit_id : null
     this.getAccountList()
     this.getList()
+    this.plan_list_data()
+    this.unit_list_data()
   },
   methods: {
     checkPermission,
-    handleSelectAccount(id) {
-      this.listQuery.account_id = id
+    plan_list_data() {
+      plan_list_data(this.listQuery).then(res => {
+        if (res.code === 200) {
+          this.plan_options = res.data
+        }
+      })
     },
-    handleSelectStatus(is_check) {
-      this.listQuery.is_check = is_check
+    unit_list_data() {
+      unit_list_data(this.listQuery).then(res => {
+        if (res.code === 200) {
+          this.unit_options = res.data
+        }
+      })
     },
     getAccountList() {
       account_list().then(res => {

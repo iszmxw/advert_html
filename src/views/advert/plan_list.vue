@@ -141,7 +141,17 @@
         align="header-center"
         label="计划名称"
       >
-        <template slot-scope="scope">{{ scope.row.name }}</template>
+        <template slot-scope="scope">
+          <el-link
+            type="primary"
+            @click.native="toPage('/advert/unit_list', {
+              account_id:scope.row.account_id,
+              plan_id:scope.row.id
+            })"
+          >
+            {{ scope.row.name }}
+          </el-link>
+        </template>
       </el-table-column>
       <el-table-column
         align="header-center"
@@ -357,6 +367,10 @@ export default {
           }
         })
         .catch(err => { console.error(err) })
+    },
+    // path 跳转路径 params 参数
+    toPage(path = '/', params = {}) {
+      this.$router.push({ path: path, query: params })
     }
   }
 }

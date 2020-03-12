@@ -45,6 +45,7 @@
           filterable
           clearable
           placeholder="请选择"
+          @change="plan_list_data"
         >
           <el-option
             v-for="item in account_list"
@@ -53,15 +54,6 @@
             :value="item.value"
           />
         </el-select>
-      </span>
-      <span>
-        <span>单元名称</span>
-        <span style="display: inline-block">
-          <el-input
-            v-model="listQuery.unit_name"
-            placeholder="单元名称"
-          />
-        </span>
       </span>
       <span>
         <span>单元状态</span>
@@ -78,6 +70,15 @@
         </el-select>
       </span>
       <span>
+        <span>单元名称</span>
+        <span style="display: inline-block">
+          <el-input
+            v-model="listQuery.unit_name"
+            placeholder="单元名称"
+          />
+        </span>
+      </span>
+      <span>
         <span>单元类型</span>
         <el-select
           v-model="listQuery.unit_type"
@@ -87,6 +88,22 @@
         >
           <el-option
             v-for="(item, index) in type_options"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </span>
+      <span v-if="listQuery.account_id > 1">
+        <span>所属计划</span>
+        <el-select
+          v-model="listQuery.plan_id"
+          filterable
+          clearable
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in plan_options"
             :key="index"
             :label="item.label"
             :value="item.value"
@@ -156,7 +173,18 @@
         align="header-center"
         label="单元名称"
       >
-        <template slot-scope="scope">{{ scope.row.name }}</template>
+        <template slot-scope="scope">
+          <el-link
+            type="primary"
+            @click.native="toPage('/advert/idea_list', {
+              account_id:scope.row.account_id,
+              plan_id:scope.row.plan_id,
+              unit_id:scope.row.id
+            })"
+          >
+            {{ scope.row.name }}
+          </el-link>
+        </template>
       </el-table-column>
       <el-table-column
         align="header-center"
@@ -306,6 +334,7 @@ export default {
         page: 1,
         limit: 10,
         status: -1,
+        plan_id: null,
         unit_type: null,
         account_id: null,
         unit_name: ''
@@ -341,8 +370,11 @@ export default {
     }
   },
   created() {
+    this.listQuery.account_id = this.$route.query.account_id !== undefined ? this.$route.query.account_id : null
+    this.listQuery.plan_id = this.$route.query.plan_id !== undefined ? this.$route.query.plan_id : null
     this.getList()
     this.getAccountList()
+    this.plan_list_data()
   },
   methods: {
     checkPermission,
@@ -366,7 +398,7 @@ export default {
       })
     },
     plan_list_data() {
-      plan_list_data().then(res => {
+      plan_list_data(this.listQuery).then(res => {
         if (res.code === 200) {
           this.plan_options = res.data
         }
@@ -378,7 +410,6 @@ export default {
       this.total = res.data.total
     },
     handleEdit(data) {
-      this.plan_list_data()
       this.unitdata.id = data.id
       this.unitdata.plan_id = data.plan_id
       this.unitdata.name = data.name
@@ -414,6 +445,10 @@ export default {
           }
         })
         .catch(err => { console.error(err) })
+    },
+    // path 跳转路径 params 参数
+    toPage(path = '/', params = {}) {
+      this.$router.push({ path: path, query: params })
     }
   }
 }
