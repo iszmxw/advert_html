@@ -61,11 +61,11 @@
     </el-col>
     <el-col
       v-permission="['isadmin']"
-      @click.native="toPage('/advert/idea_list', { status: 0 })"
       :xs="12"
       :sm="12"
       :lg="6"
       class="card-panel-col"
+      @click.native="toPage('/advert/idea_list', { status: 0 })"
     >
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-warning">
@@ -90,11 +90,11 @@
 
     <el-col
       v-permission="['isadmin']"
-      @click.native="toPage('/advert/idea_list', { status: 2 })"
       class="card-panel-col"
       :xs="12"
       :sm="12"
       :lg="6"
+      @click.native="toPage('/advert/idea_list', { status: 2 })"
     >
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-red">
