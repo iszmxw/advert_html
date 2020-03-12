@@ -41,11 +41,10 @@
       <span v-if="checkPermission(['isadmin'])">
         <span class="demonstration">选择账户</span>
         <el-select
-          :value="listQuery.account_id"
+          v-model="listQuery.account_id"
           filterable
           clearable
           placeholder="请选择"
-          @change="handleSelectAccount"
         >
           <el-option
             v-for="item in account_list"
@@ -69,7 +68,6 @@
         <el-select
           v-model="listQuery.status"
           placeholder="请选择"
-          @change="handleSelectStatus"
         >
           <el-option
             v-for="(item, index) in unitStatusList"
@@ -86,7 +84,6 @@
           filterable
           clearable
           placeholder="请选择"
-          @change="handleSelectType"
         >
           <el-option
             v-for="(item, index) in type_options"
@@ -349,21 +346,13 @@ export default {
   },
   methods: {
     checkPermission,
+    // 获取账户列表
     getAccountList() {
       account_list().then(res => {
         if (res.code === 200) {
           this.account_list = res.data
         }
       })
-    },
-    handleSelectAccount(id) {
-      this.listQuery.account_id = id
-    },
-    handleSelectStatus(status) {
-      this.listQuery.status = status
-    },
-    handleSelectType(type) {
-      this.listQuery.unit_type = type
     },
     SwitchStatus(id) {
       unit_status({ id: id }).then(res => {

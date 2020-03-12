@@ -42,11 +42,10 @@
       <span v-if="checkPermission(['isadmin'])">
         <span class="demonstration">选择账户</span>
         <el-select
-          :value="listQuery.account_id"
+          v-model="listQuery.account_id"
           filterable
           clearable
           placeholder="请选择"
-          @change="handleSelectAccount"
         >
           <el-option
             v-for="item in account_list"
@@ -70,7 +69,6 @@
         <el-select
           v-model="listQuery.status"
           placeholder="请选择"
-          @change="handleSelectStatus"
         >
           <el-option
             v-for="(item, index) in planStatusList"
@@ -296,9 +294,6 @@ export default {
   },
   methods: {
     checkPermission,
-    handleSelectAccount(id) {
-      this.listQuery.account_id = id
-    },
     getAccountList() {
       account_list().then(res => {
         if (res.code === 200) {
@@ -344,9 +339,6 @@ export default {
         this.dialogVisible = false
         this.getList()
       }
-    },
-    handleSelectStatus(status) {
-      this.listQuery.status = status
     },
     handleDelete({ $index, row }) {
       this.$confirm('确定要删除该计划吗?', '温馨提示', {
