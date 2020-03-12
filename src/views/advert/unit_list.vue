@@ -37,6 +37,74 @@
       <el-button type="primary">新增单元</el-button>
     </router-link>
 
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <span v-if="checkPermission(['isadmin'])">
+        <span class="demonstration">选择账户</span>
+        <el-select
+          :value="listQuery.account_id"
+          filterable
+          clearable
+          placeholder="请选择"
+          @change="handleSelectAccount"
+        >
+          <el-option
+            v-for="item in account_list"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </span>
+      <span>
+        <span>单元名称</span>
+        <span style="display: inline-block">
+          <el-input
+            v-model="listQuery.unit_name"
+            placeholder="单元名称"
+          />
+        </span>
+      </span>
+      <span>
+        <span>单元状态</span>
+        <el-select
+          v-model="listQuery.status"
+          placeholder="请选择"
+          @change="handleSelectStatus"
+        >
+          <el-option
+            v-for="(item, index) in unitStatusList"
+            :key="index"
+            :label="item.name"
+            :value="item.status"
+          />
+        </el-select>
+      </span>
+      <span>
+        <span>单元类型</span>
+        <el-select
+          v-model="listQuery.unit_type"
+          filterable
+          clearable
+          placeholder="请选择"
+          @change="handleSelectType"
+        >
+          <el-option
+            v-for="(item, index) in type_options"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </span>
+      <span>
+        <el-button
+          type="primary"
+          size="small"
+          @click="getList()"
+        >筛选</el-button>
+      </span>
+    </el-row>
+
     <el-table
       :data="unitList"
       style="width: 100%;margin-top:30px;"
@@ -227,6 +295,7 @@
 
 <script>
 import { unit_list, unit_delete, unit_edit, plan_list_data, unit_status } from '@/api/advert'
+import { account_list } from '@/api/statistics'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -238,8 +307,13 @@ export default {
       total: 0,
       listQuery: {
         page: 1,
-        limit: 10
+        limit: 10,
+        status: -1,
+        unit_type: null,
+        account_id: null,
+        unit_name: ''
       },
+      account_list: [],
       plan_options: [],
       type_options: [{
         value: 1,
@@ -256,14 +330,41 @@ export default {
         price: ''
       },
       unitList: [],
-      dialogVisible: false
+      dialogVisible: false,
+      unitStatusList: [{
+        status: -1,
+        name: '全部'
+      }, {
+        status: 0,
+        name: '待开启'
+      }, {
+        status: 1,
+        name: '已开启'
+      }]
     }
   },
   created() {
     this.getList()
+    this.getAccountList()
   },
   methods: {
     checkPermission,
+    getAccountList() {
+      account_list().then(res => {
+        if (res.code === 200) {
+          this.account_list = res.data
+        }
+      })
+    },
+    handleSelectAccount(id) {
+      this.listQuery.account_id = id
+    },
+    handleSelectStatus(status) {
+      this.listQuery.status = status
+    },
+    handleSelectType(type) {
+      this.listQuery.unit_type = type
+    },
     SwitchStatus(id) {
       unit_status({ id: id }).then(res => {
         if (res.code === 200) {

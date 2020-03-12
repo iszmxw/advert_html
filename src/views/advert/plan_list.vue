@@ -38,6 +38,57 @@
       <el-button type="primary">新增计划</el-button>
     </router-link>
 
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <span v-if="checkPermission(['isadmin'])">
+        <span class="demonstration">选择账户</span>
+        <el-select
+          :value="listQuery.account_id"
+          filterable
+          clearable
+          placeholder="请选择"
+          @change="handleSelectAccount"
+        >
+          <el-option
+            v-for="item in account_list"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </span>
+      <span>
+        <span>计划名称</span>
+        <span style="display: inline-block">
+          <el-input
+            v-model="listQuery.plan_name"
+            placeholder="计划名称"
+          />
+        </span>
+      </span>
+      <span>
+        <span>计划状态</span>
+        <el-select
+          v-model="listQuery.status"
+          placeholder="请选择"
+          @change="handleSelectStatus"
+        >
+          <el-option
+            v-for="(item, index) in planStatusList"
+            :key="index"
+            :label="item.name"
+            :value="item.status"
+          />
+        </el-select>
+      </span>
+      <span>
+        <el-button
+          type="primary"
+          size="small"
+          @click="getList()"
+        >筛选</el-button>
+      </span>
+    </el-row>
+
     <el-table
       :data="planList"
       style="width: 100%;margin-top:30px;"
@@ -201,6 +252,7 @@
 
 <script>
 import { get_plan_list, plan_edit, plan_delete, plan_status } from '@/api/advert'
+import { account_list } from '@/api/statistics'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -212,7 +264,10 @@ export default {
       total: 0,
       listQuery: {
         page: 1,
-        limit: 10
+        limit: 10,
+        status: -1,
+        account_id: null,
+        plan_name: ''
       },
       plan: {
         id: '',
@@ -221,14 +276,36 @@ export default {
         budget: ''
       },
       planList: [],
-      dialogVisible: false
+      account_list: [],
+      dialogVisible: false,
+      planStatusList: [{
+        status: -1,
+        name: '全部'
+      }, {
+        status: 0,
+        name: '待开启'
+      }, {
+        status: 1,
+        name: '已开启'
+      }]
     }
   },
   created() {
     this.getList()
+    this.getAccountList()
   },
   methods: {
     checkPermission,
+    handleSelectAccount(id) {
+      this.listQuery.account_id = id
+    },
+    getAccountList() {
+      account_list().then(res => {
+        if (res.code === 200) {
+          this.account_list = res.data
+        }
+      })
+    },
     SwitchStatus(id) {
       plan_status({ id: id }).then(res => {
         if (res.code === 200) {
@@ -267,6 +344,9 @@ export default {
         this.dialogVisible = false
         this.getList()
       }
+    },
+    handleSelectStatus(status) {
+      this.listQuery.status = status
     },
     handleDelete({ $index, row }) {
       this.$confirm('确定要删除该计划吗?', '温馨提示', {

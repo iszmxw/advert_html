@@ -17,9 +17,20 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <router-link to="/account/list">
+          <router-link
+            v-if="checkPermission(['isaccount'])"
+            to="/account/info"
+          >
             <el-dropdown-item>
               账户中心
+            </el-dropdown-item>
+          </router-link>
+          <router-link
+            v-if="checkPermission(['isadmin'])"
+            to="/account/list"
+          >
+            <el-dropdown-item>
+              用户列表
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>
@@ -37,6 +48,7 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import images1 from '@/assets/img/logo2.jpg'
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
   components: {
@@ -62,6 +74,7 @@ export default {
     }
   },
   methods: {
+    checkPermission,
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
