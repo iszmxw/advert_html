@@ -11,6 +11,7 @@
       class="card-panel-col"
       @click.native="toPage('account/list')"
     >
+
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-green">
           <svg-icon
@@ -31,6 +32,7 @@
         </div>
       </div>
     </el-col>
+
     <el-col
       v-permission="['isadmin']"
       :xs="12"
@@ -59,6 +61,7 @@
         </div>
       </div>
     </el-col>
+
     <el-col
       v-permission="['isadmin']"
       :xs="12"

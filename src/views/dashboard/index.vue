@@ -99,7 +99,6 @@
       <br>
       <br>
     </el-row>
-
   </div>
 </template>
 
@@ -109,7 +108,6 @@ import { statistics_day, account_list } from '@/api/statistics'
 import PanelGroup from './components/PanelGroup'
 import Pagination from '@/components/Pagination' // 基于分页的二次封装
 import checkPermission from '@/utils/permission' // 权限判断函数
-
 import LineChart from './components/LineChart'
 
 const lineChartData = {

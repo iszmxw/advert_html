@@ -4,7 +4,6 @@
       <div class="logo" />
     </div>
     <div class="body-wrap">
-
       <div class="body-area1">
         <div class="area1">
           <div class="left">
@@ -25,7 +24,6 @@
                 <div class="title-container">
                   <h3 class="title">登录</h3>
                 </div>
-
                 <el-form-item prop="username">
                   <span class="svg-container">
                     <svg-icon icon-class="user" />
@@ -40,7 +38,6 @@
                     auto-complete="on"
                   />
                 </el-form-item>
-
                 <el-form-item prop="password">
                   <span class="svg-container">
                     <svg-icon icon-class="password" />
@@ -60,7 +57,6 @@
                     <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
                   </span>
                 </el-form-item>
-
                 <el-button
                   :loading="loading"
                   type="primary"
@@ -69,7 +65,6 @@
                 >登录</el-button>
               </el-form>
             </div>
-
           </div>
         </div>
       </div>
