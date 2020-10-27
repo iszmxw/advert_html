@@ -1,8 +1,12 @@
 # advert_html
 
-> 这是一个广告管理后台，用来发布广告的
+> 这是一个广告管理后台，用来发布广告的，这里是后台相关界面仓库
 
-[线上地址](http://advert.54zm.com/admin)
+- [后端仓库(https://github.com/iszmxw/advert)](https://github.com/iszmxw/advert)
+- [前端仓库(https://github.com/iszmxw/advert_html)](https://github.com/iszmxw/advert_html)
+
+[演示地址](http://advert.54zm.com/admin)
+
 
 
 目前版本为 `v4.0+` 基于 `vue-cli` 进行构建
